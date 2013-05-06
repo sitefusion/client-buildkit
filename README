@@ -71,6 +71,6 @@ contained in this package:
 
  + xulrunners : this directory contains the unpacked Mozilla XULRunner
        releases without any modifications. These can be replaced with
-       a version of choice. Included is 12.0. Note that the base
-       directory names are platform specific and should be left the same.
+       a version of choice. Note that the base directory names are 
+       platform specific and should be left the same.
 
