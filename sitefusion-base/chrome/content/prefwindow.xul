@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://global/skin/global.css" type="text/css"?>
+
+<dialog
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    id="sitefusion-dialog"
+    title="SiteFusion PrefWindow"
+    accelerated="true"
+	onload="opener.sfRootWindow.windowObject.SiteFusion.Registry[parseInt(location.search.substr(1))].initWindow(window);">
+	
+	<menubar id="systemMenuBar">
+		<menuitem id="menu_mac_services" label="Services"/>
+		<menuitem id="menu_mac_hide_app" label="Hide SiteFusion" key="key_mac_hide_app"/>
+		<menuitem id="menu_mac_hide_others" label="Hide Others" key="key_mac_hide_others"/>
+		<menuitem id="menu_mac_show_all" label="Show All"/>
+		<menuitem id="menu_FileQuitItem" label="Quit" key="key_FileQuitItem"/>
+		<menu label="" hidden="true"><menupopup></menupopup></menu>
+		<menu label="" hidden="true"><menupopup></menupopup></menu>
+		<menu label="" hidden="true"><menupopup></menupopup></menu>
+		<menu label="" hidden="true"><menupopup></menupopup></menu>
+		<menu label="" hidden="true"><menupopup></menupopup></menu>
+		<menu label="" hidden="true"><menupopup></menupopup></menu>
+		<menu label="" hidden="true"><menupopup></menupopup></menu>
+		<menu label="" hidden="true"><menupopup></menupopup></menu>
+		<menu label="" hidden="true"><menupopup></menupopup></menu>
+		<menu label="" hidden="true"><menupopup></menupopup></menu>
+		<menu label="" hidden="true"><menupopup></menupopup></menu>
+		<menu label="" hidden="true"><menupopup></menupopup></menu>
+		<keyset>
+			<key id="key_mac_hide_app" key="h" modifiers="meta"/>
+			<key id="key_mac_hide_others" key="h" modifiers="alt meta"/>
+			<key id="key_FileQuitItem" key="q" modifiers="meta"/>
+		</keyset>
+	</menubar>
+
+</dialog>

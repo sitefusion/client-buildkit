@@ -1,0 +1,9 @@
+<!ENTITY sflogin "SiteFusion Login">
+<!ENTITY readytosignin "Klaar om aan te melden">
+<!ENTITY application "Applicatie">
+<!ENTITY username "Gebruikersnaam">
+<!ENTITY password "Wachtwoord">
+<!ENTITY arguments "Argumenten">
+<!ENTITY serverurl "Server URL">
+<!ENTITY close "Sluiten">
+<!ENTITY login "Aanmelden">

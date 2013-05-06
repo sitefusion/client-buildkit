@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<!DOCTYPE window SYSTEM "chrome://sitefusion/locale/sitefusion.dtd">
+<window
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	xmlns:html="http://www.w3.org/1999/xhtml"
+	id="sitefusion-window"
+	title="&sflogin;"
+	align="center"
+	accelerated="true"
+	onload="SiteFusion.Login.SetListener(SiteFusion.Login.ProgressListener); SiteFusion.Login.Init();">
+	
+	<script type="application/x-javascript" src="prototype.js"/>
+	<script type="application/x-javascript" src="sitefusion.js"/>
+	<script type="application/x-javascript" src="login.js"/>
+	<vbox align="stretch">
+
+		<progressmeter id="loginprogress" mode="undetermined"/>
+		<hbox pack="center"><description id="loginprogress-info" value="&readytosignin;"/></hbox>
+		<spacer height="15"/>
+
+	    <vbox align="center">
+		    <grid>
+				<columns>
+					<column/>
+					<column/>
+				</columns>
+				<rows>
+					<row align="center">
+						<label value="&serverurl;"/>
+						<textbox id="address" width="200"/>
+					</row>
+					<row align="center">
+						<label value="&application;"/>
+						<textbox id="application" width="200"/>
+					</row>
+					<row align="center">
+						<label value="&arguments;"/>
+						<textbox id="arguments" width="200"/>
+					</row>
+					<row align="center">
+						<label value="&username;"/>
+						<textbox id="username" width="200"/>
+					</row>
+					<row align="center">
+						<label value="&password;"/>
+						<textbox id="password" type="password" width="200"/>
+					</row>
+				</rows>
+			</grid>
+	
+			<spacer height="15"/>
+	
+			<hbox>
+				<button id="button-login" oncommand="SiteFusion.Login.OnLogin(
+						document.getElementById('address').value,
+						document.getElementById('application').value,
+						document.getElementById('arguments').value,
+						document.getElementById('username').value,
+						document.getElementById('password').value,
+						true);" label="&login;"/>
+				<button id="button-close" oncommand="SiteFusion.Login.OnClose()" label="&close;"/>
+			</hbox>
+	
+			<spacer height="10"/>
+		
+		</vbox>
+	</vbox>
+	<keyset>
+				<key keycode="VK_RETURN" oncommand="SiteFusion.Login.OnLogin(
+						document.getElementById('address').value,
+						document.getElementById('application').value,
+						document.getElementById('arguments').value,
+						document.getElementById('username').value,
+						document.getElementById('password').value,
+						true);"/>
+	</keyset>
+</window>

@@ -1,0 +1,24 @@
+
+[contenteditable=true] table {
+  empty-cells: show;
+}
+
+[contenteditable=true] table[empty-cells],
+[contenteditable=true] table[border="0"],
+  /* next two selectors on line below for the case where tbody is omitted */
+  [contenteditable=true] table[border="0"] > tr > td, [contenteditable=true] table[border="0"] > tr > th,
+  [contenteditable=true] table[border="0"] > thead > tr > td, [contenteditable=true] table[border="0"] > tbody > tr > td, [contenteditable=true] table[border="0"] > tfoot > tr > td,
+  [contenteditable=true] table[border="0"] > thead > tr > th, [contenteditable=true] table[border="0"] > tbody > tr > th, [contenteditable=true] table[border="0"] > tfoot > tr > th,
+  [contenteditable=true] table:not([border]),
+  /* next two selectors on line below for the case where tbody is omitted */
+  [contenteditable=true] table:not([border]) > tr > td, [contenteditable=true] table:not([border]) > tr >  th,
+  [contenteditable=true] table:not([border]) > thead > tr > td, [contenteditable=true] table:not([border]) > tbody > tr > td, [contenteditable=true] table:not([border]) > tfoot > tr > td,
+  [contenteditable=true] table:not([border]) > thead > tr > th, [contenteditable=true] table:not([border]) > tbody > tr > th, [contenteditable=true] table:not([border]) > tfoot > tr > th
+{
+  border: 1px dotted red;
+}
+
+
+[contenteditable=true] img {
+  -moz-force-broken-image-icon: 1;
+}

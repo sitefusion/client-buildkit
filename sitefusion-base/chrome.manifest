@@ -1,0 +1,6 @@
+content  sitefusion  chrome/content/
+skin     sitefusion  standard/1.0  chrome/skin/standard/
+locale sitefusion nl chrome/locale/sitefusion/nl/
+locale sitefusion en-US chrome/locale/sitefusion/en-US/
+locale 	 branding en-US chrome/branding/en-US/
+locale 	 branding nl chrome/branding/en-US/

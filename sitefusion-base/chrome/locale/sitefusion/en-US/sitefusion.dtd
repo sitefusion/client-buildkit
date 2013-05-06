@@ -1,0 +1,9 @@
+<!ENTITY sflogin "SiteFusion Login">
+<!ENTITY readytosignin "Ready to sign in">
+<!ENTITY application "Application">
+<!ENTITY username "Username">
+<!ENTITY password "Password">
+<!ENTITY arguments "Arguments">
+<!ENTITY serverurl "Server URL">
+<!ENTITY close "Close">
+<!ENTITY login "Login">

@@ -1,0 +1,7 @@
+HOWTO SiteFusion-Connector Linux
+==============================================================================
+Just extract the package to wherever you want.
+Starting SiteFusion can be done by running the 'sitefusion' executable.
+Double-click it in your file manager or start from a terminal using:
+
+./sitefusion

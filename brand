@@ -1,0 +1,58 @@
+#!/usr/bin/php
+<?php
+
+if( ! isset($argv[1]) )
+	die( "No vendor specified\n" );
+if( ! isset($argv[2]) )
+	die( "No product specified\n" );
+
+$vendor = $argv[1];
+$product = $argv[2];
+
+echo "Will brand builds with:\nVendor:  $vendor\nProduct: $product\n\n";
+
+function brandFile( $path ) {
+	global $vendor, $product;
+	
+	$newpath = dirname($path).'/'.substr(basename($path),5);
+	rename( $path, $newpath );
+	$cont = file_get_contents($newpath);
+	$cont = str_replace("%VENDOR%",$vendor,$cont);
+	$cont = str_replace("%APP%",$product,$cont);
+	file_put_contents( $newpath, $cont );
+}
+
+$paths = array(
+	'windows/base_application.ini',
+	'macosx/Contents/Resources/base_application.ini',
+	'linux/32bit/base_application.ini',
+	'linux/64bit/base_application.ini',
+	
+	'windows/chrome/branding/en-US/base_brand.dtd',
+	'macosx/Contents/Resources/chrome/branding/en-US/base_brand.dtd',
+	'linux/32bit/chrome/branding/en-US/base_brand.dtd',
+	'linux/64bit/chrome/branding/en-US/base_brand.dtd',
+	
+	'windows/chrome/branding/en-US/base_about.dtd',
+	'macosx/Contents/Resources/chrome/branding/en-US/base_about.dtd',
+	'linux/32bit/chrome/branding/en-US/base_about.dtd',
+	'linux/64bit/chrome/branding/en-US/base_about.dtd',
+	
+	'windows/chrome/branding/en-US/base_brand.properties',
+	'macosx/Contents/Resources/chrome/branding/en-US/base_brand.properties',
+	'linux/32bit/chrome/branding/en-US/base_brand.properties',
+	'linux/64bit/chrome/branding/en-US/base_brand.properties',
+	
+	'macosx/Contents/base_Info.plist'
+);
+
+foreach ( $paths as $path ) {
+	$fullpath = 'builds/'.$path;
+	if(! file_exists($fullpath) )
+		continue;
+	
+	echo "- Branding $path\n";
+	brandFile( $fullpath );
+}
+
+echo "Done\n";

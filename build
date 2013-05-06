@@ -1,0 +1,260 @@
+#!/bin/bash
+
+BUILD_WINDOWS=0
+BUILD_MACOSX=0
+BUILD_LINUX=0
+
+if [ $# -eq 0 ]; then
+	BUILD_WINDOWS=1; BUILD_MACOSX=1; BUILD_LINUX=1
+else
+	for platform
+	do
+		case "$platform" in
+			"windows"	) BUILD_WINDOWS=1;;
+			"macosx"	) BUILD_MACOSX=1;;
+			"linux"		) BUILD_LINUX=1;;
+			*			) echo "Unrecognized platform '$platform'"; exit 1;;
+		esac
+	done
+fi
+
+echo -n "Build for platforms: "
+(($BUILD_WINDOWS)) && echo -n "Windows "
+(($BUILD_MACOSX)) && echo -n "MacOSX "
+(($BUILD_LINUX)) && echo -n "Linux "
+echo ""
+
+
+echo "Clear build directories..."
+if [ ! -z "$(ls -A ./builds/)" ]; then
+	rm -rf ./builds/*
+fi
+
+(($BUILD_WINDOWS)) && mkdir ./builds/windows
+(($BUILD_MACOSX)) && mkdir ./builds/macosx
+(($BUILD_LINUX)) && mkdir ./builds/linux
+(($BUILD_LINUX)) && mkdir ./builds/linux/32bit
+(($BUILD_LINUX)) && mkdir ./builds/linux/64bit
+
+echo "Copy the roots (platform-dependent)..."
+if [ $BUILD_WINDOWS == 1 ]; then
+	if [ ! -z "$(ls ./sitefusion-root/windows/)" ]; then
+		echo "  - Windows root found"
+		cp -R ./sitefusion-root/windows/* ./builds/windows/
+	else
+		echo "  - Windows root is not present"
+	fi
+fi
+
+if [ $BUILD_MACOSX == 1 ]; then
+	if [ ! -z "$(ls ./sitefusion-root/macosx/)" ]; then
+		echo "  - MacOSX root found"
+		cp -R ./sitefusion-root/macosx/* ./builds/macosx/
+	else
+		echo "  ! MacOSX root NOT found"
+	fi
+fi
+
+if [ $BUILD_LINUX == 1 ]; then
+	if [ ! -z "$(ls ./sitefusion-root/linux/)" ]; then
+		echo "  - Linux root found"
+		cp -R ./sitefusion-root/linux/* ./builds/linux/32bit
+		cp -R ./sitefusion-root/linux/* ./builds/linux/64bit
+	else
+		echo "  - Linux root is not present"
+	fi
+fi
+
+
+echo "Copy SiteFusion base (platform-independent)..."
+if [ ! -z "$(ls ./sitefusion-base/)" ]; then
+	echo "  - Base found"
+	(($BUILD_WINDOWS)) && cp -R ./sitefusion-base/* ./builds/windows/
+	(($BUILD_MACOSX)) && cp -R ./sitefusion-base/* ./builds/macosx/Contents/Resources/
+	(($BUILD_LINUX)) && cp -R ./sitefusion-base/* ./builds/linux/32bit/
+	(($BUILD_LINUX)) && cp -R ./sitefusion-base/* ./builds/linux/64bit/
+else
+	echo "  ! Base not found!"
+	exit 1
+fi
+
+echo "Copy the SiteFusion extended files (platform-dependent)..."
+if [ $BUILD_WINDOWS == 1 ]; then
+	if [ ! -z "$(ls ./sitefusion-extended/windows/)" ]; then
+		echo "  - Windows extended found"
+		cp -R ./sitefusion-extended/windows/* ./builds/windows/
+	else
+		echo "  ! Windows extended NOT found"
+	fi
+fi
+
+if [ $BUILD_MACOSX == 1 ]; then
+	if [ ! -z "$(ls ./sitefusion-extended/macosx/)" ]; then
+		echo "  - MacOSX extended found"
+		cp -R ./sitefusion-extended/macosx/* ./builds/macosx/Contents/Resources/
+	else
+		echo "  - MacOSX extended is not present"
+	fi
+fi
+
+if [ $BUILD_LINUX == 1 ]; then
+	if [ ! -z "$(ls ./sitefusion-extended/linux/32bit)" ]; then
+		echo "  - Linux 32bit extended found"
+		cp -R ./sitefusion-extended/linux/32bit/* ./builds/linux/32bit/
+	else
+		echo "  ! Linux 32bit extended NOT found"
+	fi
+	if [ ! -z "$(ls ./sitefusion-extended/linux/64bit)" ]; then
+		echo "  - Linux 64bit extended found"
+		cp -R ./sitefusion-extended/linux/64bit/* ./builds/linux/64bit/
+	else
+		echo "  ! Linux 64bit extended NOT found"
+	fi
+fi
+
+
+echo "Copy the XULRunners (platform-dependent)..."
+if [ $BUILD_WINDOWS == 1 ]; then
+	if [ ! -z "$(ls ./xulrunners/windows/)" ]; then
+		echo "  - Windows XULRunner found"
+		cp -R ./xulrunners/windows/* ./builds/windows/
+	else
+		echo "  ! Windows XULRunner NOT found"
+	fi
+fi
+
+if [ $BUILD_MACOSX == 1 ]; then
+	if [ ! -z "$(ls ./xulrunners/macosx/)" ]; then
+		echo "  - MacOSX XULRunner found"
+		cp -R ./xulrunners/macosx/* ./builds/macosx/Contents/Frameworks/
+	else
+		echo "  ! MacOSX XULRunner NOT found"
+	fi
+	
+	if [ ! -z "$(ls ./xulrunners/macosx/XUL.framework/updater.app)" ]; then
+		echo "  - MacOSX XULRunner updater.app found"
+		cp -R ./xulrunners/macosx/* ./builds/macosx/Contents/Frameworks/
+	else
+		echo "  ! MacOSX XULRunner updater NOT found"
+	fi
+fi
+
+if [ $BUILD_LINUX == 1 ]; then
+	if [ ! -z "$(ls ./xulrunners/linux/32bit/)" ]; then
+		echo "  - Linux 32bit XULRunner found"
+		cp -R ./xulrunners/linux/32bit/* ./builds/linux/32bit/
+	else
+		echo "  ! Linux 32bit XULRunner NOT found"
+	fi
+	if [ ! -z "$(ls ./xulrunners/linux/64bit/)" ]; then
+		echo "  - Linux 64bit XULRunner found"
+		cp -R ./xulrunners/linux/64bit/* ./builds/linux/64bit/
+	else
+		echo "  ! Linux 64bit XULRunner NOT found"
+	fi
+fi
+
+
+echo "Copy XULRunner chrome extension (platform-independent)..."
+if [ ! -z "$(ls ./xulrunner-chrome/)" ]; then
+	echo "  - Chrome patch found"
+	(($BUILD_WINDOWS)) && mkdir -p ./builds/windows/xulrunner/chrome/
+	(($BUILD_WINDOWS)) && cd ./xulrunner-chrome/ && find ./ ! -name '*.patch' | cpio -pd ../builds/windows/xulrunner/chrome/
+	(($BUILD_WINDOWS)) && cd ..
+	
+	(($BUILD_MACOSX)) && mkdir -p ./builds/macosx/Contents/Frameworks/XUL.framework/chrome/
+	(($BUILD_MACOSX)) && cd ./xulrunner-chrome/ && find ./ ! -name '*.patch' | cpio -pd ../builds/macosx/Contents/Frameworks/XUL.framework/chrome/
+	(($BUILD_MACOSX)) && cd ..
+	
+	
+	(($BUILD_LINUX)) && mkdir -p ./builds/linux/32bit/xulrunner/chrome/
+	(($BUILD_LINUX)) && cd ./xulrunner-chrome/ && find ./ ! -name '*.patch' | cpio -pd ../builds/linux/32bit/xulrunner/chrome/
+	(($BUILD_LINUX)) && cd ..
+	
+	
+	(($BUILD_LINUX)) && mkdir -p ./builds/linux/64bit/xulrunner/chrome/
+	(($BUILD_LINUX)) && cd ./xulrunner-chrome/ && find ./ ! -name '*.patch' | cpio -pd ../builds/linux/64bit/xulrunner/chrome/
+	(($BUILD_LINUX)) && cd ..
+	
+	if [ ! -z "$(ls ./xulrunner-chrome/chrome.manifest.patch)" ]; then
+		echo "  - Chrome diff patch found"
+		(($BUILD_WINDOWS)) && echo "applying chrome.manifest.patch to windows build..."
+		(($BUILD_WINDOWS)) && patch ./builds/windows/xulrunner/chrome.manifest < ./xulrunner-chrome/chrome.manifest.patch
+		(($BUILD_MACOSX)) && echo "applying chrome.manifest.patch to Mac OSX build..."
+		(($BUILD_MACOSX)) && patch ./builds/macosx/Contents/Frameworks/XUL.framework/chrome.manifest < ./xulrunner-chrome/chrome.manifest.patch
+		(($BUILD_MACOSX)) && echo "applying chrome.manifest.patch to Linux builds..."
+		(($BUILD_LINUX)) && patch ./builds/linux/32bit/xulrunner/chrome.manifest < ./xulrunner-chrome/chrome.manifest.patch
+		(($BUILD_LINUX)) && patch ./builds/linux/64bit/xulrunner/chrome.manifest < ./xulrunner-chrome/chrome.manifest.patch
+	fi
+else
+	echo "  - Chrome patch is not present"
+fi
+
+
+echo "Apply XULRunner res patches (platform-independent)..."
+if [ ! -z "$(ls ./xulrunner-res/*.patch)" ]; then
+	echo "  - Res patch found"
+	for patchfile in ./xulrunner-res/*.patch
+	do
+		filename=${patchfile%.patch}
+		filename=`basename $filename`
+		echo "  - Applying ${filename}.patch"
+		(($BUILD_WINDOWS)) && echo "Processing patch file:" 
+		(($BUILD_WINDOWS)) && echo "  - Unzipping windows res to ./builds/windows/xulrunner/res/${filename}"
+		(($BUILD_WINDOWS)) && unzip ./builds/windows/xulrunner/omni.ja res/$filename -d ./builds/windows/xulrunner/
+		(($BUILD_WINDOWS)) && echo "  - Patching ./builds/windows/xulrunner/res/${filename}"
+		(($BUILD_WINDOWS)) && patch ./builds/windows/xulrunner/res/$filename < $patchfile
+		(($BUILD_WINDOWS)) && echo "  - Adding contents of ./builds/windows/xulrunner/res/${filename} to omni.ja"
+		(($BUILD_WINDOWS)) && cd ./builds/windows/xulrunner/
+		(($BUILD_WINDOWS)) && zip -m omni.ja ./res/${filename}
+		(($BUILD_WINDOWS)) && rm -r res
+		(($BUILD_WINDOWS)) && cd ../../..
+		
+		#(($BUILD_MACOSX)) && echo "  - Unzipping Mac OSX res to ./builds/windows/xulrunner/res/${filename}"
+		#(($BUILD_MACOSX)) && unzip ./builds/macosx/Contents/Frameworks/XUL.framework/omni.ja res/$filename -d ./builds/macosx/Contents/Frameworks/XUL.framework/
+		#(($BUILD_MACOSX)) && echo "  - Patching ./builds/macosx/Contents/Frameworks/XUL.framework/res/${filename}"
+		(($BUILD_MACOSX)) && patch ./builds/macosx/Contents/Frameworks/XUL.framework/res/${filename} < $patchfile
+		#(($BUILD_MACOSX)) && echo "  - Adding contents of ./builds/macosx/Contents/Frameworks/XUL.framework/res/${filename} to omni.ja"
+		#(($BUILD_MACOSX)) && cd ./builds/macosx/Contents/Frameworks/XUL.framework/
+		#(($BUILD_MACOSX)) && zip -m omni.ja ./res/${filename}
+		#(($BUILD_MACOSX)) && rm -r res
+		#(($BUILD_MACOSX)) && cd ../../../../..
+		
+		(($BUILD_LINUX)) && echo "  - Unzipping Linux-32 res to ./builds/windows/xulrunner/res/${filename}"
+		(($BUILD_LINUX)) && unzip ./builds/linux/32bit/xulrunner/omni.ja res/$filename -d ./builds/linux/32bit/xulrunner/res/
+		(($BUILD_LINUX)) && echo "  - Patching ./builds/linux/32bit/xulrunner/res/${filename}"
+		(($BUILD_LINUX)) && patch ./builds/linux/32bit/xulrunner/res/${filename} < $patchfile
+		(($BUILD_LINUX)) && echo "  - Adding contents of ./builds/linux/32bit/xulrunner/res/${filename} to omni.ja"
+		(($BUILD_LINUX)) && cd ./builds/linux/32bit/xulrunner/
+		(($BUILD_LINUX)) && zip -m omni.ja ./res/${filename}
+		(($BUILD_LINUX)) && rm -r res
+		(($BUILD_LINUX)) && cd ../../../..
+		
+		(($BUILD_LINUX)) && echo "  - Unzipping Linux-32 res to ./builds/windows/xulrunner/res/${filename}"
+		(($BUILD_LINUX)) && unzip ./builds/linux/64bit/xulrunner/omni.ja res/$filename -d ./builds/linux/64bit/xulrunner/res/
+		(($BUILD_LINUX)) && echo "  - Patching ./builds/linux/64bit/xulrunner/res/${filename}"
+		(($BUILD_LINUX)) && patch ./builds/linux/64bit/xulrunner/res/${filename} < $patchfile
+		(($BUILD_LINUX)) && echo "  - Adding contents of ./builds/linux/64bit/xulrunner/res/${filename} to omni.ja"
+		(($BUILD_LINUX)) && cd ./builds/linux/64bit/xulrunner/
+		(($BUILD_LINUX)) && zip -m omni.ja ./res/${filename}
+		(($BUILD_LINUX)) && rm -r res
+		(($BUILD_LINUX)) && cd ../../../..
+		
+		
+	done
+else
+	echo "  - Res patch is not present"
+fi
+
+(($BUILD_MACOSX)) && echo "Setting dir chmod (MacOSX)"
+(($BUILD_MACOSX)) && chmod -R 0777 ./builds/macosx
+
+(($BUILD_LINUX)) && echo "Setting dir chmod (Linux)"
+(($BUILD_LINUX)) && chmod -R 0777 ./builds/linux
+
+echo "Cleaning up build directories..."
+(($BUILD_WINDOWS)) && find ./builds/windows -type d -name '.svn' -print0 | xargs -0 rm -rdf
+(($BUILD_MACOSX)) && find ./builds/macosx -type d -name '.svn' -print0 | xargs -0 rm -rdf
+(($BUILD_LINUX)) && find ./builds/linux -type d -name '.svn' -print0 | xargs -0 rm -rdf
+
+echo "Done"

@@ -1,0 +1,7 @@
+#!/bin/bash
+
+echo "Clear build directories..."
+if [ ! -z "$(ls -A ./builds/)" ]; then
+	rm -rf ./builds/*
+fi
+echo "  Done"
