@@ -20,7 +20,7 @@ Three shell scripts are included:
 
  + brand <vendor> <product>
        The brand script brands the base clients in the builds directory
-       with the specified vendor and product name. Note that both vendor
+       with the specified vendor and product name (and optionally a vendorURL). Note that both vendor
        and product need to be strings without spaces.
 
  + clear
@@ -30,7 +30,7 @@ Three shell scripts are included:
 Example: the command to build and brand the SiteFusion.org branded
 SiteFusion client for all three platforms is:
 
-       ./build && ./brand SiteFusion.org SiteFusion
+       ./build && ./brand SiteFusion.org SiteFusion http://www.sitefusion.org
 
 
 
@@ -72,5 +72,6 @@ contained in this package:
  + xulrunners : this directory contains the unpacked Mozilla XULRunner
        releases without any modifications. These can be replaced with
        a version of choice. Note that the base directory names are 
-       platform specific and should be left the same.
+       platform specific and should be left the same. Linux needs to 
+       supplied with both a 32bit and a 64bit clients.
 
