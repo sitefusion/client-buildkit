@@ -7,3 +7,16 @@
 <!ENTITY serverurl "Server URL">
 <!ENTITY close "Close">
 <!ENTITY login "Login">
+<!ENTITY tools "Tools">
+
+<!ENTITY mnusitefusion "SiteFusion">
+<!ENTITY mnusfproxysettings "Proxy Settings">
+<!ENTITY mnusfinfo "SiteFusion Info">
+<!ENTITY mnusferrorconsole "Error Console">
+<!ENTITY mnusfcheckupdates "Check for updates">
+<!ENTITY mnusfopenextensions "Manage Add-ons">
+<!ENTITY mnusfopenaboutconfig "Manage Preferences">
+<!ENTITY mnusfopenaboutsupport "System Information">
+<!ENTITY mnusfopenaboutcrashes "Crashes">
+<!ENTITY mnusfopenaboutmemory "Memory usage">
+<!ENTITY mnusfopenaboutplugins "Plugin information">

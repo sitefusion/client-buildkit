@@ -61,17 +61,16 @@ pref("app.update.showInstalledUI", false); // broken?
 pref("extensions.update.enabled", true);
 pref("extensions.dss.switchPending", false);
 pref("extensions.update.url", "https://www.sitefusion.org/-1/phpblock/update_extensions.rdf?reqVersion=%REQ_VERSION%&id=%ITEM_ID%&version=%ITEM_VERSION%&maxAppVersion=%ITEM_MAXAPPVERSION%&status=%ITEM_STATUS%&appID=%APP_ID%&appVersion=%APP_VERSION%&appOS=%APP_OS%&appABI=%APP_ABI%&locale=%APP_LOCALE%&currentAppVersion=%CURRENT_APP_VERSION%&updateType=%UPDATE_TYPE%");
-pref("extensions.update.interval", 86400);  // Check for updates to Extensions and 
-                                            // Themes every day
+pref("extensions.update.interval", 86400);  // Check for updates to Extensions and Themes every day
 pref("extensions.getMoreExtensionsURL", "http://www.sitefusion.org/extensions");
 pref("extensions.getMorePluginsURL", "http://www.sitefusion.org/plugins");
+pref("extensions.webservice.discoverURL", "http://sitefusion.org/addonmanager");
 
 pref("extensions.getAddons.cache.enabled", true);
 pref("extensions.getAddons.maxResults", 15);
 pref("extensions.getAddons.get.url", false);
 pref("extensions.getAddons.search.browseURL", false);
 pref("extensions.getAddons.search.url", false);
-pref("extensions.webservice.discoverURL", "http://sitefusion.org/addonmanager");
 
 pref("extensions.getAddons.cache.enabled",false);
 pref("extensions.blocklist.url",false);
@@ -79,3 +78,4 @@ pref("extensions.logging.enabled",false);
 pref("javascript.options.showInConsole",true);
 pref("nglayout.debug.disable_xul_cache",false);
 pref("browser.dom.window.dump.enabled",true);
+pref("general.warnOnAboutConfig",false);

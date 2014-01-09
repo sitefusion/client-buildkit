@@ -4,6 +4,87 @@ var PromptService = Cc["@mozilla.org/embedcomp/prompt-service;1"].getService(Ci.
 var SFStringBundleService = Components.classes["@mozilla.org/intl/stringbundle;1"].getService(Components.interfaces.nsIStringBundleService);
 var SFStringBundleObj = SFStringBundleService.createBundle('chrome://sitefusion/locale/sitefusion.properties');
 		
+SiteFusionPopup = {
+
+	openProxySettings: function() {
+		window.openDialog("chrome://sitefusion/content/connection.xul", "modifyProxyDialog", "resizable,dialog,centerscreen,modal", this);
+		//force reloading settings
+		TFDLogin.Init();	
+	},
+	
+	openExtensionManager: function() {
+		window.open("chrome://mozapps/content/extensions/extensions.xul", "sfExtensions", "chrome,menubar,extra-chrome,toolbar,dialog=no,resizable");
+	},
+	
+	openAboutInfo: function() {
+		try {
+			SiteFusion.ChromeToPath("chrome://branding/content/about.xhtml");
+		}
+		catch (e) {
+			PromptService.alert( window, 'Error', "No branding registered.");
+			return;
+		}
+		openDialog("chrome://branding/content/about.xhtml", "sfinfoWindow", "chrome,centerscreen,modal");
+	},
+	
+	openAboutConfig: function() {
+		window.open("chrome://global/content/config.xul", "sfAboutConfigWindow", "chrome,centerscreen");
+	},
+	
+	openErrorConsole: function() {
+		window.open("chrome://global/content/console.xul", "sfErrorConsole", "chrome,menubar,extra-chrome,toolbar,dialog=no,resizable");
+	},
+	
+	openAboutSupport: function() {
+		window.openDialog("about:support", "sfAboutSupportWindow", "chrome,centerscreen,width=500,height=800");
+	},
+	
+	openAboutCrashes: function() {
+		window.openDialog("about:crashes", "sfAboutCrashesWindow", "chrome,centerscreen,width=500,height=300");
+	},
+	
+	openAboutMemory: function() {
+		window.openDialog("about:memory", "sfAboutMemoryWindow", "chrome,centerscreen,width=500,height=800");
+	},
+	
+	openAboutPlugins: function() {
+		window.openDialog("about:plugins", "sfAboutPluginsWindow", "chrome,centerscreen,width=500,height=800");
+	},
+	
+	
+	openUpdates: function() {
+		var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Ci.nsIPrefBranch);
+		
+		if (!prefs.getBoolPref( "app.update.enabled")) {
+			var targetWindow = window;
+	        winUtils = targetWindow.QueryInterface(Ci.nsIInterfaceRequestor).getInterface(Ci.nsIDOMWindowUtils);
+
+	        try {
+		        if (winUtils && !winUtils.isParentWindowMainWidgetVisible) {
+		            targetWindow = null;
+		        }
+	    	}
+	    	catch (e) {
+	    		targetWindow = null;
+	    	}
+			PromptService.alert( targetWindow, SFStringBundleObj.GetStringFromName('error'), SFStringBundleObj.GetStringFromName('updates_disabled'));
+			return false;
+		} 
+	    var um = Cc["@mozilla.org/updates/update-manager;1"].getService(Ci.nsIUpdateManager);
+	    var prompter = Cc["@mozilla.org/updates/update-prompt;1"].createInstance(Ci.nsIUpdatePrompt);
+	
+	    // If there's an update ready to be applied, show the "Update Downloaded"
+	    // UI instead and let the user know they have to restart the browser for
+	    // the changes to be applied. 
+	    if (um.activeUpdate && um.activeUpdate.state == "pending")
+	      prompter.showUpdateDownloaded(um.activeUpdate);
+	    else
+	      prompter.checkForUpdates();
+
+	 	return true;
+	}
+};
+
 SiteFusion = {
 	Address: null,
 	Application: null,
@@ -14,7 +95,8 @@ SiteFusion = {
 	
 	ClientID: null,
 	Errors: {},
-	
+	FatalErrorOccurred: false,
+
 	RemoteLibraries: [],
 	LibraryContent: [],
 	
@@ -161,6 +243,20 @@ SiteFusion = {
 		if( typeof(error.message) != undefined && error.message )
 			SiteFusion.ServerError( error.message+'' );
 		
+		//the care the errors that are likely to be cascaded, and should therefor be filtered conditionally
+		var suppressedErrors = ['empty_error','input_error','session_error','php_error','js_error'];
+
+		for (var i = 0; i < suppressedErrors.length; i++) {
+        	if (suppressedErrors[i] === error.type) {
+            	if (this.IsErrorConsoleOpen() || this.FatalErrorOccurred) return;
+        	}
+    	}
+		
+		if (error.type == 'session_error' || error.type == 'php_error') {
+			//session errors and php errors are considered fatal since they indicate the start of an error cascade
+			this.FatalErrorOccurred = true;
+		}
+
 		if( error.error) {
 			if (typeof SiteFusion.Errors[error.type] != "undefined") {
 				message = SiteFusion.Errors[error.type].message;
@@ -169,23 +265,34 @@ SiteFusion = {
 			else {
 				message = SFStringBundleObj.GetStringFromName('error_unspecified_error') + ': ' + error.type;
 			}
+			var targetWindow = window;
+	        winUtils = targetWindow.QueryInterface(Ci.nsIInterfaceRequestor).getInterface(Ci.nsIDOMWindowUtils);
+
+	        try {
+		        if (winUtils && !winUtils.isParentWindowMainWidgetVisible) {
+		            targetWindow = null;
+		        }
+	    	}
+	    	catch (e) {
+	    		targetWindow = null;
+	    	}
 
 			if( message ) {
 				if (check) {
 					var checkState = { value: debug };
-					PromptService.alertCheck( window, SFStringBundleObj.GetStringFromName('error'), message, SFStringBundleObj.GetStringFromName('openErrorConsole'), checkState );
+					PromptService.alertCheck( targetWindow, SFStringBundleObj.GetStringFromName('error'), message, SFStringBundleObj.GetStringFromName('openErrorConsole'), checkState );
 					if( checkState.value )
 						SiteFusion.OpenErrorConsole();
 				}
 				else {
 					var checkState = { value: debug };
-					PromptService.alert( window, SFStringBundleObj.GetStringFromName('error'), message);
+					PromptService.alert( targetWindow, SFStringBundleObj.GetStringFromName('error'), message);
 				}
 			}
 			else {
 					//unspecified errors should always show checkbox
 					var checkState = { value: debug };
-					PromptService.alertCheck( window, SFStringBundleObj.GetStringFromName('error'), message, SFStringBundleObj.GetStringFromName('openErrorConsole'), checkState );
+					PromptService.alertCheck( targetWindow, SFStringBundleObj.GetStringFromName('error'), message, SFStringBundleObj.GetStringFromName('openErrorConsole'), checkState );
 			}
 		}
 		else if( debug )
@@ -215,16 +322,21 @@ SiteFusion = {
 			consoleService.logStringMessage( extendedMsg );
 		}
 	},
-	
-	OpenErrorConsole: function() {
+	IsErrorConsoleOpen: function() {
 		var windowManager = Cc['@mozilla.org/appshell/window-mediator;1'].getService(Ci.nsIWindowMediator);
 		var windowEnum = windowManager.getEnumerator(null);
 		while( windowEnum.hasMoreElements() ) {
 			var win = windowEnum.getNext();
 			if( win.location == "chrome://global/content/console.xul" ) {
 				win.focus();
-				return;
+				return true;
 			}
+		}
+		return false;
+	},
+	OpenErrorConsole: function() {
+		if (this.IsErrorConsoleOpen()) {
+			return;
 		}
 		
 		window.openDialog( "chrome://global/content/console.xul", '', "chrome,menubar,extra-chrome,toolbar,dialog=no,resizable" );
@@ -286,8 +398,8 @@ SiteFusion = {
 		};
 	},
 	
-	parseUri: function (str) {
-		var	o   = SiteFusion.parseUriOptions,
+	ParseUri: function (str) {
+		var	o   = SiteFusion.ParseUriOptions,
 			m   = o.parser[o.strictMode ? "strict" : "loose"].exec(str),
 			uri = {},
 			i   = 14;
@@ -302,7 +414,7 @@ SiteFusion = {
 		return uri;
 	},
 
-	parseUriOptions: {
+	ParseUriOptions: {
 		strictMode: false,
 		key: ["source","protocol","authority","userInfo","user","password","host","port","relative","path","directory","file","query","anchor"],
 		q:   {
@@ -313,5 +425,33 @@ SiteFusion = {
 			strict: /^(?:([^:\/?#]+):)?(?:\/\/((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?))?((((?:[^?#\/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/,
 			loose:  /^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/)?((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/
 		}
+	},
+
+	ChromeToPath: function(aPath) {
+		if (!aPath || !(/^chrome:/.test(aPath)))
+			return; //not a chrome url
+		var rv;
+
+		var ios = Components.classes['@mozilla.org/network/io-service;1'].getService(Components.interfaces["nsIIOService"]);
+		var uri = ios.newURI(aPath, "UTF-8", null);
+		var cr = Components.classes['@mozilla.org/chrome/chrome-registry;1'].getService(Components.interfaces["nsIChromeRegistry"]);
+		rv = cr.convertChromeURL(uri).spec;
+
+		if (/^file:/.test(rv))
+		rv = this.UrlToPath(rv);
+		else
+		rv = this.UrlToPath("file://"+rv);
+
+		return rv;
+	},
+
+	UrlToPath: function(aPath) {
+	    if (!aPath || !/^file:/.test(aPath))
+	      return ;
+	    var rv;
+		var ph = Components.classes["@mozilla.org/network/protocol;1?name=file"]
+	        .createInstance(Components.interfaces.nsIFileProtocolHandler);
+	    rv = ph.getFileFromURLSpec(aPath).path;
+	    return rv;
 	}
 };

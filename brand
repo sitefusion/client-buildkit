@@ -6,18 +6,25 @@ if( ! isset($argv[1]) )
 if( ! isset($argv[2]) )
 	die( "No product specified\n" );
 
+
 $vendor = $argv[1];
 $product = $argv[2];
+$vendorURL = "http://www.sitefusion.org";
 
-echo "Will brand builds with:\nVendor:  $vendor\nProduct: $product\n\n";
+if (isset($argv[3])) {
+	$vendorURL = $argv[3];
+}
+
+echo "Will brand builds with:\nVendor:  $vendor\nProduct: $product\nVendorURL: $vendorURL\n\n";
 
 function brandFile( $path ) {
-	global $vendor, $product;
+	global $vendor, $product, $vendorURL;
 	
 	$newpath = dirname($path).'/'.substr(basename($path),5);
 	rename( $path, $newpath );
 	$cont = file_get_contents($newpath);
 	$cont = str_replace("%VENDOR%",$vendor,$cont);
+	$cont = str_replace("%VENDORURL%",$vendorURL,$cont);
 	$cont = str_replace("%APP%",$product,$cont);
 	file_put_contents( $newpath, $cont );
 }

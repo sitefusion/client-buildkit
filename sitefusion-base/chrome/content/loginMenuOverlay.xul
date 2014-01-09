@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE overlay SYSTEM "chrome://sitefusion/locale/sitefusion.dtd">
+
+<overlay id="loginMnu" xmlns:html="http://www.w3.org/1999/xhtml" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<menu label="&mnusitefusion;" id="mnusitefusion">
+	<menupopup id="sitefusion-popup">
+	    <menuitem label="&mnusfinfo;" oncommand="SiteFusionPopup.openAboutInfo()"/>
+	    <menuitem label="&mnusferrorconsole;" oncommand="SiteFusionPopup.openErrorConsole()"/>
+	    <menuitem label="&mnusfcheckupdates;" oncommand="SiteFusionPopup.openUpdates()"/>
+	    <menuitem label="&mnusfopenextensions;" oncommand="SiteFusionPopup.openExtensionManager()"/>
+	    <menuitem label="&mnusfopenaboutconfig;" oncommand="SiteFusionPopup.openAboutConfig()"/>
+	    <menuitem label="&mnusfopenaboutsupport;" oncommand="SiteFusionPopup.openAboutSupport()"/>
+	    <menuitem label="&mnusfopenaboutcrashes;" oncommand="SiteFusionPopup.openAboutCrashes()"/>
+	    <menuitem label="&mnusfopenaboutmemory;" oncommand="SiteFusionPopup.openAboutMemory()"/>
+	    <menuitem label="&mnusfopenaboutplugins;" oncommand="SiteFusionPopup.openAboutPlugins()"/>
+	    <menuitem label="&mnusfproxysettings;" oncommand="SiteFusionPopup.openProxySettings()"/>
+    </menupopup>
+</menu>
+</overlay>

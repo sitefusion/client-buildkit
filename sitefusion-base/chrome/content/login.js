@@ -1,6 +1,11 @@
 Components.utils.import("resource://gre/modules/AddonManager.jsm");
 
 SiteFusion.Login = {
+
+	argsAppUrl: null,
+	argsUsername: null,
+	argsPassword: null,
+
 	Fields: [
 		'address',
 		'application',
@@ -18,6 +23,32 @@ SiteFusion.Login = {
 	
 	extensionInfo: {},
 	
+	ParseCommandLineArguments: function(args) {
+		if(args != null) {
+			args = new String(args);
+			var idxOfXulQ = args.indexOf('.xul?');
+			if(idxOfXulQ != -1) {
+			    var query = args.substr(idxOfXulQ + 5);
+			    var parts = query.split("&");
+			    for(var i = 0; i < parts.length; i++) {
+			        var part = parts[i];
+			        var qPart = part.indexOf('=');
+			        if(qPart != -1) {
+			            var key = part.substr(0, qPart);
+			            var value = unescape(part.substr(qPart+1));
+			            
+			            if(key == 'appUrl')
+			                this.argsAppUrl = value;
+			            else if (key == 'username')
+			                this.argsUsername = value;
+			            else if (key == 'password')
+			                this.argsPassword = value;
+			        }
+			    }
+			}
+		}
+	},
+
 	Init: function() {
 		SiteFusion.ImportErrors();
 		var oThis = this;
@@ -50,48 +81,64 @@ SiteFusion.Login = {
 					sourceURI: (addon.sourceURI) ? addon.sourceURI.spec : '',
 					updateDate: addon.updateDate.toString()
 				};
-				//this has to be done after loading the extensionlist, because it depends on it
+			});
+			//this has to be done after loading the extensionlist, because it depends on it
+			
+			var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Ci.nsIPrefBranch);
+			var autoLogin = true;
+			var focusElement = null;
+			
+			for( var n = 0; n < oThis.Fields.length; n++ ) {
+				var field = oThis.Fields[n];
+				var value = null;
+				var forced = false;
 				
-				var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Ci.nsIPrefBranch);
-				var autoLogin = true;
-				var focusElement = null;
-				
-				for( var n = 0; n < oThis.Fields.length; n++ ) {
-					var field = oThis.Fields[n];
-					var value = null;
-					var forced = false;
-					
-					if( prefs.getPrefType("sitefusion.forceLogin."+field) == prefs.PREF_STRING ) {
-						value = prefs.getCharPref( "sitefusion.forceLogin."+field );
-						forced = true;
-					}
-					else if( prefs.getPrefType("sitefusion.lastLogin."+field) == prefs.PREF_STRING ) {
-						value = prefs.getCharPref( "sitefusion.lastLogin."+field );
-						forced = false;
-					}
-					
-					details[field] = { 'value': value, 'forced': forced };
+				if( prefs.getPrefType("sitefusion.forceLogin."+field) == prefs.PREF_STRING ) {
+					value = prefs.getCharPref( "sitefusion.forceLogin."+field );
+					forced = true;
+				}
+				else if( prefs.getPrefType("sitefusion.lastLogin."+field) == prefs.PREF_STRING ) {
+					value = prefs.getCharPref( "sitefusion.lastLogin."+field );
+					forced = false;
 				}
 				
-				setTimeout(function() {
-					if(prefs.getPrefType("sitefusion.autoLogin.enabled") == prefs.PREF_BOOL && prefs.getBoolPref("sitefusion.autoLogin.enabled") ) {
-						prefs.setBoolPref( "sitefusion.autoLogin.enabled", false );
-						var address = prefs.getCharPref( "sitefusion.autoLogin.address" );
-						prefs.setCharPref( "sitefusion.autoLogin.address", "" );
-						var application = prefs.getCharPref( "sitefusion.autoLogin.application" );
-						prefs.setCharPref( "sitefusion.autoLogin.application", "" );
-						var arguments = prefs.getCharPref( "sitefusion.autoLogin.arguments" );
-						prefs.setCharPref( "sitefusion.autoLogin.arguments", "" );
-						var username = prefs.getCharPref( "sitefusion.autoLogin.username" );
-						prefs.setCharPref( "sitefusion.autoLogin.username", "" );
-						var password = prefs.getCharPref( "sitefusion.autoLogin.password" );
-						prefs.setCharPref( "sitefusion.autoLogin.password", "" );
-						
-						SiteFusion.Login.OnLogin( address, application, arguments, username, password, false );
-					}
-				},500);
-			});
+				details[field] = { 'value': value, 'forced': forced };
+			}
 			
+			setTimeout(function() {
+				//first check for autologin based on preferences.
+				if(prefs.getPrefType("sitefusion.autoLogin.enabled") == prefs.PREF_BOOL && prefs.getBoolPref("sitefusion.autoLogin.enabled") ) {
+					prefs.setBoolPref( "sitefusion.autoLogin.enabled", false );
+					var address = prefs.getCharPref( "sitefusion.autoLogin.address" );
+					prefs.setCharPref( "sitefusion.autoLogin.address", "" );
+					var application = prefs.getCharPref( "sitefusion.autoLogin.application" );
+					prefs.setCharPref( "sitefusion.autoLogin.application", "" );
+					var arguments = prefs.getCharPref( "sitefusion.autoLogin.arguments" );
+					prefs.setCharPref( "sitefusion.autoLogin.arguments", "" );
+					var username = prefs.getCharPref( "sitefusion.autoLogin.username" );
+					prefs.setCharPref( "sitefusion.autoLogin.username", "" );
+					var password = prefs.getCharPref( "sitefusion.autoLogin.password" );
+					prefs.setCharPref( "sitefusion.autoLogin.password", "" );
+					
+					SiteFusion.Login.OnLogin( address, application, arguments, username, password, false );
+				}
+				else if (oThis.argsAppUrl && oThis.argsUsername && oThis.argsPassword) {
+					var ret = SiteFusion.ParseUri(oThis.argsAppUrl);
+					if(ret['protocol'] && ret['user'] && ret['host']) {
+							var proto = ret['protocol']
+							if (proto == 'sf')
+								proto = "http";
+							else if (proto == 'sfs')
+								proto = "https";
+								
+
+							var uri = proto + "://" + ret['host'] + ((ret['port']) ? ":" + ret['port'] : "") + ret['path'];
+							SiteFusion.Login.OnLogin( uri, ret['user'], ret['password'], oThis.argsUsername, oThis.argsPassword, false );
+					}
+				}
+			},500);
+		
+		
 			for( var n = 0; n < oThis.Listeners.length; n++ ) {
 					oThis.Listeners[n].onInit( details );
 			}
@@ -132,8 +179,8 @@ SiteFusion.Login = {
 		}
 		
 		SiteFusion.ClientID = SiteFusion.GetRandomQuery();
-        
-        var serverAddressParts = SiteFusion.parseUri(address);
+        SiteFusion.FatalErrorOccurred = false;
+        var serverAddressParts = SiteFusion.ParseUri(address);
 		var serverHost = serverAddressParts.host;
         
         var DNSResolver = Components.classes["@mozilla.org/network/dns-service;1"].getService(Components.interfaces.nsIDNSService );
@@ -200,7 +247,8 @@ SiteFusion.Login = {
 				}
 			}
 			
-			x.open( 'POST', address + '/login.php?app=' + application + '&args=' + arguments + '&clientid=' + SiteFusion.ClientID, false );
+			var postAddress = address + '/login.php?app=' + application + '&args=' + arguments + '&clientid=' + SiteFusion.ClientID;
+			x.open( 'POST', postAddress, false );
 			x.setRequestHeader( 'Content-Type', 'sitefusion/login' );
 			x.send( Object.toJSON( {
 				'username': username,
@@ -225,7 +273,7 @@ SiteFusion.Login = {
 				this.Listeners[n].onFinish( false, SiteFusion.Login.ProgressListener.ERROR_SERVER_DOWN, SFStringBundleObj.GetStringFromName("short_cantConnect") );
 			}
 			
-			SiteFusion.HandleError( { 'error': true, 'type': 'server_offline', 'message': 'Server returned response code ' + x.status } );
+			SiteFusion.HandleError( { 'error': true, 'type': 'server_offline', 'message': 'Server ' + postAddress + ' returned response code ' + x.status } );
 			return false;
 		}
 		
@@ -449,7 +497,12 @@ SiteFusion.Login = {
 			            nsIWBP.PERSIST_FLAGS_FAIL_ON_BROKEN_LINKS |
 			            nsIWBP.PERSIST_FLAGS_CLEANUP_ON_FAILURE;
 			
-			persist.saveURI(url,null,null,null,null,path);
+			var privacyContext = window.QueryInterface(Components.interfaces.nsIInterfaceRequestor)
+			.getInterface(Components.interfaces.nsIWebNavigation)
+			.QueryInterface(Components.interfaces.nsILoadContext);
+			
+			persist.saveURI(url,null,null,null,null,path,privacyContext);
+			
 			return progressListener;
 			
 		} catch (e) {

@@ -2,3 +2,4 @@
 <!ENTITY  brandFullName         "%APP%">
 <!ENTITY  brandMotto              "Empowering PHP based application development since 1337">
 <!ENTITY  vendorShortName     "%VENDOR%">
+<!ENTITY  vendorURL         "%VENDORURL%">

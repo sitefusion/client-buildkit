@@ -1,0 +1,6 @@
+xulrunners/linux/32bit/xulrunner
+xulrunners/linux/64bit/xulrunner
+xulrunners/macosx/XUL.framework
+xulrunners/windows/xulrunner
+.DS_Store
+._.DS_Store
