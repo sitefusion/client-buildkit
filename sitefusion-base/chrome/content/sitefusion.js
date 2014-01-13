@@ -24,7 +24,7 @@ SiteFusionPopup = {
 			PromptService.alert( window, 'Error', "No branding registered.");
 			return;
 		}
-		openDialog("chrome://branding/content/about.xhtml", "sfinfoWindow", "chrome,centerscreen,modal");
+		window.open("chrome://branding/content/about.xhtml", "sfinfoWindow", "chrome,centerscreen");
 	},
 	
 	openAboutConfig: function() {
