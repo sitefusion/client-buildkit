@@ -12,7 +12,7 @@
 	title="&sflogin;"
 	align="center"
 	accelerated="true"
-	onload="SiteFusion.Login.SetListener(SiteFusion.Login.ProgressListener); SiteFusion.Login.Init();">
+	onload="SiteFusion.Login.SetListener(SiteFusion.Login.ProgressListener); SiteFusion.Login.Init(window.location);">
 	
 	<script type="application/x-javascript" src="prototype.js"/>
 	<script type="application/x-javascript" src="sitefusion.js"/>

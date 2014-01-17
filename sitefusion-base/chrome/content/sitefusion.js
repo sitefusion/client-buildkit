@@ -9,7 +9,7 @@ SiteFusionPopup = {
 	openProxySettings: function() {
 		window.openDialog("chrome://sitefusion/content/connection.xul", "modifyProxyDialog", "resizable,dialog,centerscreen,modal", this);
 		//force reloading settings
-		TFDLogin.Init();	
+		SiteFusion.Init();	
 	},
 	
 	openExtensionManager: function() {

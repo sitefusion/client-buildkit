@@ -49,8 +49,11 @@ SiteFusion.Login = {
 		}
 	},
 
-	Init: function() {
+	Init: function(startupLocation) {
 		SiteFusion.ImportErrors();
+		if (startupLocation) {
+			SiteFusion.Login.ParseCommandLineArguments(startupLocation); 
+		}
 		var oThis = this;
 		AddonManager.getAllAddons(function(aAddons) {
 			
@@ -147,6 +150,10 @@ SiteFusion.Login = {
 	},
 	
 	OnClose: function(keepLoginDetails) {
+		for( var n = 0; n < this.Listeners.length; n++ ) {
+			this.Listeners[n].onClose();
+		}
+
 		if (!keepLoginDetails) {
 			this.ForgetLoginDetails();
 		}
@@ -158,6 +165,10 @@ SiteFusion.Login = {
 		//don't save details? Clean them up!
 		prefs.setCharPref( "sitefusion.lastLogin.username",  '' );
 		prefs.setCharPref( "sitefusion.lastLogin.password", '' );
+
+		for( var n = 0; n < this.Listeners.length; n++ ) {
+			this.Listeners[n].onForgetLoginDetails();
+		}
 	},
 	
 	OnLogin: function( address, application, arguments, username, password, rememberDetails ) {
