@@ -80,3 +80,4 @@ pref("nglayout.debug.disable_xul_cache",false);
 pref("browser.dom.window.dump.enabled",true);
 pref("general.warnOnAboutConfig",false);
 pref("breakpad.reportURL","http://crash-stats.mozilla.com/report/index/");
+pref("app.support.baseURL","http://www.sitefusion.org/");

@@ -9,13 +9,8 @@ if( ! isset($argv[2]) )
 
 $vendor = $argv[1];
 $product = $argv[2];
-$vendorURL = "http://www.sitefusion.org";
 
-if (isset($argv[3])) {
-	$vendorURL = $argv[3];
-}
-
-echo "Will brand builds with:\nVendor:  $vendor\nProduct: $product\nVendorURL: $vendorURL\n\n";
+echo "Will brand builds with:\nVendor:  $vendor\nProduct: $product\n";
 
 function brandFile( $path ) {
 	global $vendor, $product, $vendorURL;
@@ -24,7 +19,6 @@ function brandFile( $path ) {
 	rename( $path, $newpath );
 	$cont = file_get_contents($newpath);
 	$cont = str_replace("%VENDOR%",$vendor,$cont);
-	$cont = str_replace("%VENDORURL%",$vendorURL,$cont);
 	$cont = str_replace("%APP%",$product,$cont);
 	file_put_contents( $newpath, $cont );
 }
