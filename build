@@ -1,5 +1,5 @@
 #!/bin/bash
-
+umask 0002
 BUILD_WINDOWS=0
 BUILD_MACOSX=0
 BUILD_LINUX=0
