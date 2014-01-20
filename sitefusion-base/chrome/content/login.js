@@ -590,9 +590,11 @@ SiteFusion.Login = {
 		onInit: function( savedDetails ) {
 			for ( field in savedDetails ) {
 				var el = document.getElementById(field);
-				el.value = savedDetails[field].value;
-				if( savedDetails[field].forced )
-					el.hidden = true;
+				if (el) {
+					el.value = savedDetails[field].value;
+					if( savedDetails[field].forced )
+						el.hidden = true;
+				}
 			}
 		},
 		
