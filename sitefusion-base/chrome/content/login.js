@@ -624,12 +624,12 @@ SiteFusion.Login = {
 			
 			if( ! success )
 				document.getElementById('button-login').disabled = false;
-		}
-	},
-    onClose: function() {
-    	
-    },
-    onForgetLoginDetails: function() {
+		},
+	    onClose: function() {
+	    	
+	    },
+	    onForgetLoginDetails: function() {
 
-    }
+	    }
+	}
 };
