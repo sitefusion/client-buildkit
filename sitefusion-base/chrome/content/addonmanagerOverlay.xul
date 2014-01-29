@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<overlay id="sample" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+<script>
+<![CDATA[
+Components.utils.import("resource://gre/modules/AddonManager.jsm");
+
+var SiteFusionAddonManager = {
+	installSFAddon: function(evt) {
+		var installs=[];
+		var uri =  evt.target.toString();
+		AddonManager.getInstallForURL(uri, function (aInstall) {
+        	installs.push(aInstall);
+        	AddonManager.installAddonsFromWebpage("application/x-xpinstall", window, null, installs);
+      }, "application/x-xpinstall");
+
+	}
+};
+
+document.addEventListener("installSFAddon", 
+	function(e) {
+		SiteFusionAddonManager.installSFAddon(e);
+	}, false, true);
+]]>
+</script>
+</overlay>

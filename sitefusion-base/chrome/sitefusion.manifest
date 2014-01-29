@@ -4,3 +4,4 @@ locale sitefusion nl locale/sitefusion/nl/
 locale sitefusion en-US locale/sitefusion/en-US/
 locale 	 branding en-US branding/en-US/
 locale 	 branding nl branding/en-US/
+overlay chrome://mozapps/content/extensions/extensions.xul chrome://sitefusion/content/addonmanagerOverlay.xul
