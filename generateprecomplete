@@ -1,0 +1,66 @@
+#!/bin/bash
+
+list_files() {
+  count=0
+
+  find . -type f \
+    ! -name "channel-prefs.js" \
+    ! -name "precomplete" \
+    ! -name "update.manifest" \
+    ! -name "updatev2.manifest" \
+    ! -name "base_application.ini" \
+    ! -name "base_brand.dtd" \
+    ! -name "base_Info.plist" \
+    ! -name "base_about.dtd" \
+    ! -name ".DS_Store" \
+    ! -name "._.DS_Store" \
+    ! -name "base_brand.properties" \
+    ! -name "temp-dirlist" \
+    ! -name "temp-filelist" \
+    | sed 's/\.\/\(.*\)/\1/' \
+    | sort -r > "temp-filelist"
+  while read file; do
+    eval "${1}[$count]=\"$file\""
+    (( count++ ))
+  done < "temp-filelist"
+  rm "temp-filelist"
+}
+
+list_dirs() {
+  count=0
+
+  find . -type d \
+    ! -name "." \
+    ! -name ".." \
+    | sed 's/\.\/\(.*\)/\1/' \
+    | sort -r > "temp-dirlist"
+  while read dir; do
+    eval "${1}[$count]=\"$dir\""
+    (( count++ ))
+  done < "temp-dirlist"
+  rm "temp-dirlist"
+}
+targetdir="$1"
+
+pushd "$targetdir"
+if test $? -ne 0 ; then
+  exit 1
+fi
+
+echo "remove \"precomplete\"" >> "precomplete";
+
+list_files files
+
+num_files=${#files[*]}
+
+for ((i=0; $i<$num_files; i=$i+1)); do
+  echo "remove \"${files[$i]}\"" >> "precomplete"
+done
+
+list_dirs dirs
+
+num_dirs=${#dirs[*]}
+
+for ((i=0; $i<$num_dirs; i=$i+1)); do
+  echo "rmdir \"${dirs[$i]}/\"" >> "precomplete"
+done

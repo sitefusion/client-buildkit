@@ -47,6 +47,8 @@ $paths = array(
 	'macosx/Contents/base_Info.plist'
 );
 
+$platformRoots = array("windows", "macosx", "linux/32bit", "linux/64bit");
+
 foreach ( $paths as $path ) {
 	$fullpath = 'builds/'.$path;
 	if(! file_exists($fullpath) )
@@ -54,6 +56,11 @@ foreach ( $paths as $path ) {
 	
 	echo "- Branding $path\n";
 	brandFile( $fullpath );
+}
+
+foreach ($platformRoots as $platformRoot) {
+	echo "Generating precomplete file for platform: $platformRoot\n";
+	exec("./generateprecomplete \"builds/$platformRoot\"");
 }
 
 echo "Done\n";
