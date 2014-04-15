@@ -16,6 +16,7 @@
 	    <menuitem label="&mnusfopenaboutmemory;" oncommand="SiteFusionPopup.openAboutMemory()"/>
 	    <menuitem label="&mnusfopenaboutplugins;" oncommand="SiteFusionPopup.openAboutPlugins()"/>
 	    <menuitem label="&mnusfproxysettings;" oncommand="SiteFusionPopup.openProxySettings()"/>
+	    <menuitem label="&mnusfcertmanager;" oncommand="SiteFusionPopup.openCertificateManager()"/>
     </menupopup>
 </menu>
 </overlay>
