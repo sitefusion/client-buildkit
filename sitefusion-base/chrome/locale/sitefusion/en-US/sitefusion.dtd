@@ -18,5 +18,6 @@
 <!ENTITY mnusfopenaboutconfig "Manage Preferences">
 <!ENTITY mnusfopenaboutsupport "System Information">
 <!ENTITY mnusfopenaboutcrashes "Crashes">
-<!ENTITY mnusfopenaboutmemory "Memory usage">
-<!ENTITY mnusfopenaboutplugins "Plugin information">
+<!ENTITY mnusfopenaboutmemory "Memory Usage">
+<!ENTITY mnusfopenaboutplugins "Plugin Information">
+<!ENTITY mnusfcertmanager "Certificate Mananager">
