@@ -13,7 +13,7 @@
         <menuitem id="menu_FileQuitItem" label="Quit" key="key_FileQuitItem"/>
     </menubar>
 	<toolbox id="navigator-toolbox"></toolbox>
-	<script type="application/x-javascript" src="zepto.js"/>
+	<script type="application/x-javascript" src="prototype.js"/>
 	<script type="application/x-javascript" src="system.js"/>
 	<script type="application/x-javascript" src="sitefusion.js"/>
 </window>

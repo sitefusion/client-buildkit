@@ -14,7 +14,7 @@
 	accelerated="true"
 	onload="SiteFusion.Login.SetListener(SiteFusion.Login.ProgressListener); SiteFusion.Login.Init(window.location);">
 	
-	<script type="application/x-javascript" src="zepto.js"/>
+	<script type="application/x-javascript" src="prototype.js"/>
 	<script type="application/x-javascript" src="sitefusion.js"/>
 	<script type="application/x-javascript" src="login.js"/>
 	<vbox align="stretch">
