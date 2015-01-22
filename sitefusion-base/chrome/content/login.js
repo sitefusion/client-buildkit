@@ -276,7 +276,7 @@ SiteFusion.Login = {
 				}
 			};
 			x.setRequestHeader( 'Content-Type', 'sitefusion/login' );
-			x.send( Object.toJSON( {
+			x.send( JSON.stringify( {
 				'username': username,
 				'password': password,
 				'appInfo': appInfo,
