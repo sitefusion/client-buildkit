@@ -59,6 +59,9 @@ foreach ( $paths as $path ) {
 }
 
 foreach ($platformRoots as $platformRoot) {
+	$fullpath = 'builds/'.$platformRoot;
+	if(! file_exists($fullpath) )
+		continue;
 	echo "Generating precomplete file for platform: $platformRoot\n";
 	exec("./generateprecomplete \"builds/$platformRoot\"");
 }
