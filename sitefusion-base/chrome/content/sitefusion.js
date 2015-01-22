@@ -50,10 +50,7 @@ SiteFusionPopup = {
 	openAboutPlugins: function() {
 		window.openDialog("about:plugins", "sfAboutPluginsWindow", "chrome,centerscreen,width=500,height=800");
 	},
-
-	openCertificateManager: function() {
-		window.openDialog('chrome://pippki/content/certManager.xul');
-	},
+	
 	
 	openUpdates: function() {
 		var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Ci.nsIPrefBranch);
@@ -99,7 +96,6 @@ SiteFusion = {
 	ClientID: null,
 	Errors: {},
 	FatalErrorOccurred: false,
-	WakeOccurred: false,
 
 	RemoteLibraries: [],
 	LibraryContent: [],
@@ -244,9 +240,6 @@ SiteFusion = {
 		var check = false;
 		var debug = (location.search.substr(1).split('&').indexOf('-sfdebug=true') != -1);
 		
-		//don't show any errors after a wake message
-		if (this.WakeOccurred) return;
-
 		if( typeof(error.message) != undefined && error.message )
 			SiteFusion.ServerError( error.message+'' );
 		
@@ -350,7 +343,19 @@ SiteFusion = {
 	},
 	
 	Error: function( text ) {
-		PromptService.alert( window, 'Error', text );
+		var targetWindow = window;
+        winUtils = targetWindow.QueryInterface(Ci.nsIInterfaceRequestor).getInterface(Ci.nsIDOMWindowUtils);
+
+        try {
+	        if (winUtils && !winUtils.isParentWindowMainWidgetVisible) {
+	            targetWindow = null;
+	        }
+    	}
+    	catch (e) {
+    		targetWindow = null;
+    	}
+	    	
+		PromptService.alert( targetWindow, 'Error', text );
 		if( SiteFusion.RootWindow )
 			SiteFusion.RootWindow.close();
 		else

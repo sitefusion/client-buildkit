@@ -197,8 +197,10 @@ var System = {
 		if( prefs.getPrefType("sitefusion.defaultDialogURI") != prefs.PREF_STRING ) {
 			prefs.setCharPref( "sitefusion.defaultDialogURI", "chrome://sitefusion/content/dialog.xul" );
 		}
-		
-		window.open(prefs.getCharPref( "sitefusion.defaultLoginWindowURI") + '?'+this.query,'sitefusion-window','chrome,extra-chrome,centerscreen');
-		window.close();
+		var ret = window.open(prefs.getCharPref( "sitefusion.defaultLoginWindowURI") + '?'+this.query,'sitefusion-window','chrome,extra-chrome,centerscreen');
+		if( !navigator.platform.match(/mac/i)) {
+			window.close();
+		}
+		return ret;
 	}
 }

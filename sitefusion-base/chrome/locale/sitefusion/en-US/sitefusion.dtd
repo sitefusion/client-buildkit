@@ -21,3 +21,11 @@
 <!ENTITY mnusfopenaboutmemory "Memory Usage">
 <!ENTITY mnusfopenaboutplugins "Plugin Information">
 <!ENTITY mnusfcertmanager "Certificate Mananager">
+
+<!ENTITY mnumacaboutsitefusion "About SiteFusion">
+<!ENTITY mnumacservices "Services">
+<!ENTITY mnumachidesitefusion "Hide SiteFusion">
+<!ENTITY mnumachideothers "Hide Others">
+<!ENTITY mnumacshowall "Show All">
+<!ENTITY mnumacnewsession "New session">
+<!ENTITY mnumacquit "Quit SiteFusion">

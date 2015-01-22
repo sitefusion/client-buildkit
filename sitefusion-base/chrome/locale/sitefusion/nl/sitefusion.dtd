@@ -21,3 +21,11 @@
 <!ENTITY mnusfopenaboutmemory "Geheugen gebruik">
 <!ENTITY mnusfopenaboutplugins "Plugin informatie">
 <!ENTITY mnusfcertmanager "Certificaatbeheer">
+
+<!ENTITY mnumacaboutsitefusion "Over SiteFusion">
+<!ENTITY mnumacservices "Voorzieningen">
+<!ENTITY mnumachidesitefusion "Verberg SiteFusion">
+<!ENTITY mnumachideothers "Verberg andere">
+<!ENTITY mnumacshowall "Toon alle vensters">
+<!ENTITY mnumacnewsession "Nieuwe sessie">
+<!ENTITY mnumacquit "Stop SiteFusion">
