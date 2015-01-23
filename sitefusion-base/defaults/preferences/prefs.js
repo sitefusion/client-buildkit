@@ -25,7 +25,9 @@ pref("javascript.options.jit.chrome", true);
 pref("javascript.options.jit.content", true);
 
 pref("network.protocol-handler.expose.http", false);
+pref("network.protocol-handler.expose.https", false);
 pref("network.protocol-handler.warn-external.http", false);
+pref("network.protocol-handler.warn-external.https", false);
 
 pref("network.protocol-handler.expose.mailto", false);
 pref("network.protocol-handler.warn-external.mailto", false);
