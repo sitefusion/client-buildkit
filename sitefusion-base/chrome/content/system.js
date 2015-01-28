@@ -95,12 +95,16 @@ var System = {
 	},
 	
 	StartupInit: function() {
+		
 		if( window.arguments && window.arguments[0] ) {
-
+			var startDebugger = false;
 			var cmdline = window.arguments[0].QueryInterface(Components.interfaces.nsICommandLine);
 			
 			for( var n = 0; n < cmdline.length; n++ ) {
 				var arg = cmdline.getArgument(n);
+				if (arg == "chrome://browser/content/devtools/framework/toolbox-process-window.xul") {
+					startDebugger = true;
+				}
 				if( arg.substr(0,1) == '-' && cmdline.length-1 > n ) {
 					var name = arg.replace(/^\-+/,'');
 					this.query += (this.query == ''?'':'&')+escape(name)+'='+escape(cmdline.getArgument(n+1));
@@ -108,6 +112,11 @@ var System = {
 				}
 				else
 					this.query += (this.query == ''?'':'&')+escape(arg)+'=true';
+			}
+			if (startDebugger) {
+				var ret = window.open("chrome://browser/content/devtools/framework/toolbox-process-window.xul",'sitefusion-window','chrome,extra-chrome,centerscreen');
+				window.close();
+				return;
 			}
 		}
 		
