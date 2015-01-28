@@ -21,6 +21,7 @@
 <!ENTITY mnusfopenaboutmemory "Geheugen gebruik">
 <!ENTITY mnusfopenaboutplugins "Plugin informatie">
 <!ENTITY mnusfcertmanager "Certificaatbeheer">
+<!ENTITY mnudebugsession "Sessie Debuggen">
 
 <!ENTITY mnumacaboutsitefusion "Over SiteFusion">
 <!ENTITY mnumacservices "Voorzieningen">

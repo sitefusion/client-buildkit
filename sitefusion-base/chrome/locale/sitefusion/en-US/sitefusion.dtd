@@ -21,6 +21,7 @@
 <!ENTITY mnusfopenaboutmemory "Memory Usage">
 <!ENTITY mnusfopenaboutplugins "Plugin Information">
 <!ENTITY mnusfcertmanager "Certificate Mananager">
+<!ENTITY mnudebugsession "Debug Session">
 
 <!ENTITY mnumacaboutsitefusion "About SiteFusion">
 <!ENTITY mnumacservices "Services">
