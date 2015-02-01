@@ -228,7 +228,7 @@ SiteFusion = {
 		var CM = this.Comm;
 		
 		try {
-			eval( code );
+			eval( code + "\n\n//# sourceURL=sitefusion-eval-execute.js");
 		}
 		catch ( e ) {
 			SiteFusion.HandleError( { error: true, type: 'js_error', message: e + "\n\n" + code } );
