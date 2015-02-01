@@ -305,12 +305,12 @@ SiteFusion.Login = {
 					this.Listeners[n].onFinish( false, SiteFusion.Login.ProgressListener.ERROR_LOGIN_INVALID, SFStringBundleObj.GetStringFromName("short_cantConnect") );
 				}
 			
-				SiteFusion.HandleError( eval( '(' + x.responseText + ')' ) );
+				SiteFusion.HandleError( eval( "(" + x.responseText + ")\n\n//# sourceURL=sitefusion-eval-login.js" ) );
 				
 				return false;
 			}
 			
-			login = eval( '(' + x.responseText + ')' );
+			login = eval( "(" + x.responseText + ")\n\n//# sourceURL=sitefusion-eval-login.js" );
 		}
 		else {
 			for( var n = 0; n < this.Listeners.length; n++ ) {
