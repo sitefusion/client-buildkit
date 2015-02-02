@@ -54,97 +54,98 @@ SiteFusion.Login = {
 		if (startupLocation) {
 			SiteFusion.Login.ParseCommandLineArguments(startupLocation); 
 		}
-
 		var oThis = this;
 		AddonManager.getAllAddons(function(aAddons) {
+			
 			var details = {};
+			
 			aAddons.forEach(function(addon) {
-				try {
-					var addonData = {
-						name: addon.name,
-						version: addon.version,
-						userDisabled: addon.userDisabled,
-						enabled: ((!addon.userDisabled && !addon.appDisabled) ? true : false),
-						isActive: addon.isActive,
-						isCompatible: addon.isCompatible,
-						installLocationKey: addon.scope,
-						isPlatformCompatible: addon.isPlatformCompatible,
-						providesUpdatesSecurely: addon.providesUpdatesSecurely,
-						scope: addon.scope,
-						type: addon.type,
-						userDisabled: addon.userDisabled,
-						aboutURL: addon.aboutURL,
-						description: addon.description,
-						homepageURL: addon.homepageURL,
-						iconURL: addon.iconURL,
-						installDate: addon.installDate.toString(),
-						optionsURL: addon.optionsURL,
-						size: addon.size,
-						sourceURI: (addon.sourceURI) ? addon.sourceURI.spec : '',
-						updateDate: addon.updateDate.toString()
-					};
-
-					oThis.extensionInfo[addon.id] = addonData;
-				} catch(e) {
-					
-				}
+				
+				oThis.extensionInfo[addon.id] = {
+					name: addon.name,
+					version: addon.version,
+					userDisabled: addon.userDisabled,
+					enabled: ((!addon.userDisabled && !addon.appDisabled) ? true : false),
+					isActive: addon.isActive,
+					isCompatible: addon.isCompatible,
+					installLocationKey: addon.scope,
+					isPlatformCompatible: addon.isPlatformCompatible,
+					providesUpdatesSecurely: addon.providesUpdatesSecurely,
+					scope: addon.scope,
+					type: addon.type,
+					userDisabled: addon.userDisabled,
+					aboutURL: addon.aboutURL,
+					description: addon.description,
+					homepageURL: addon.homepageURL,
+					iconURL: addon.iconURL,
+					installDate: addon.installDate.toString(),
+					optionsURL: addon.optionsURL,
+					size: addon.size,
+					sourceURI: (addon.sourceURI) ? addon.sourceURI.spec : '',
+					updateDate: addon.updateDate.toString()
+				};
 			});
+			//this has to be done after loading the extensionlist, because it depends on it
 			
 			var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Ci.nsIPrefBranch);
 			var autoLogin = true;
 			var focusElement = null;
 			
-			for(var n = 0; n < oThis.Fields.length; n++) {
+			for( var n = 0; n < oThis.Fields.length; n++ ) {
 				var field = oThis.Fields[n];
 				var value = null;
 				var forced = false;
 				
-				if (prefs.getPrefType("sitefusion.forceLogin." + field) == prefs.PREF_STRING) {
-					value = prefs.getCharPref("sitefusion.forceLogin." + field);
+				if( prefs.getPrefType("sitefusion.forceLogin."+field) == prefs.PREF_STRING ) {
+					value = prefs.getCharPref( "sitefusion.forceLogin."+field );
 					forced = true;
-				} else if( prefs.getPrefType("sitefusion.lastLogin." + field) == prefs.PREF_STRING) {
-					value = prefs.getCharPref("sitefusion.lastLogin." + field);
+				}
+				else if( prefs.getPrefType("sitefusion.lastLogin."+field) == prefs.PREF_STRING ) {
+					value = prefs.getCharPref( "sitefusion.lastLogin."+field );
 					forced = false;
 				}
 				
-				details[field] = {'value': value, 'forced': forced};
-			}
-
-			for (var n = 0; n < oThis.Listeners.length; n++) {
-				oThis.Listeners[n].onInit(details);
+				details[field] = { 'value': value, 'forced': forced };
 			}
 			
 			setTimeout(function() {
-				if (prefs.getPrefType("sitefusion.autoLogin.enabled") == prefs.PREF_BOOL && prefs.getBoolPref("sitefusion.autoLogin.enabled")) {
-					prefs.setBoolPref("sitefusion.autoLogin.enabled", false);
-					var address = prefs.getCharPref("sitefusion.autoLogin.address");
-					prefs.setCharPref("sitefusion.autoLogin.address", "");
-					var application = prefs.getCharPref("sitefusion.autoLogin.application");
-					prefs.setCharPref("sitefusion.autoLogin.application", "" );
-					var args = prefs.getCharPref("sitefusion.autoLogin.arguments" );
-					prefs.setCharPref("sitefusion.autoLogin.arguments", "");
-					var username = prefs.getCharPref("sitefusion.autoLogin.username");
-					prefs.setCharPref("sitefusion.autoLogin.username", "");
-					var password = prefs.getCharPref("sitefusion.autoLogin.password");
-					prefs.setCharPref("sitefusion.autoLogin.password", "");
+				//first check for autologin based on preferences.
+				if(prefs.getPrefType("sitefusion.autoLogin.enabled") == prefs.PREF_BOOL && prefs.getBoolPref("sitefusion.autoLogin.enabled") ) {
+					prefs.setBoolPref( "sitefusion.autoLogin.enabled", false );
+					var address = prefs.getCharPref( "sitefusion.autoLogin.address" );
+					prefs.setCharPref( "sitefusion.autoLogin.address", "" );
+					var application = prefs.getCharPref( "sitefusion.autoLogin.application" );
+					prefs.setCharPref( "sitefusion.autoLogin.application", "" );
+					var args = prefs.getCharPref( "sitefusion.autoLogin.arguments" );
+					prefs.setCharPref( "sitefusion.autoLogin.arguments", "" );
+					var username = prefs.getCharPref( "sitefusion.autoLogin.username" );
+					prefs.setCharPref( "sitefusion.autoLogin.username", "" );
+					var password = prefs.getCharPref( "sitefusion.autoLogin.password" );
+					prefs.setCharPref( "sitefusion.autoLogin.password", "" );
 					
-					SiteFusion.Login.OnLogin(address, application, args, username, password, false);
-				} else if (oThis.argsAppUrl && oThis.argsUsername && oThis.argsPassword) {
+					SiteFusion.Login.OnLogin( address, application, args, username, password, false );
+				}
+				else if (oThis.argsAppUrl && oThis.argsUsername && oThis.argsPassword) {
 					var ret = SiteFusion.ParseUri(oThis.argsAppUrl);
-					if (ret['protocol'] && ret['user'] && ret['host']) {
-						var proto = ret['protocol']
-						if (proto == 'sf') {
-							proto = "http";
-						} else if (proto == 'sfs') {
-							proto = "https";
-						}
-							
+					if(ret['protocol'] && ret['user'] && ret['host']) {
+							var proto = ret['protocol']
+							if (proto == 'sf')
+								proto = "http";
+							else if (proto == 'sfs')
+								proto = "https";
+								
 
-						var uri = proto + "://" + ret['host'] + ((ret['port']) ? ":" + ret['port'] : "") + ret['path'];
-						SiteFusion.Login.OnLogin(uri, ret['user'], ret['password'], oThis.argsUsername, oThis.argsPassword, false);
+							var uri = proto + "://" + ret['host'] + ((ret['port']) ? ":" + ret['port'] : "") + ret['path'];
+							SiteFusion.Login.OnLogin( uri, ret['user'], ret['password'], oThis.argsUsername, oThis.argsPassword, false );
 					}
 				}
-			}, 500);			
+			},500);
+		
+		
+			for( var n = 0; n < oThis.Listeners.length; n++ ) {
+					oThis.Listeners[n].onInit( details );
+			}
+				
 		});
 	},
 	
@@ -276,7 +277,7 @@ SiteFusion.Login = {
 				}
 			};
 			x.setRequestHeader( 'Content-Type', 'sitefusion/login' );
-			x.send( JSON.stringify( {
+			x.send( Object.toJSON( {
 				'username': username,
 				'password': password,
 				'appInfo': appInfo,
@@ -304,7 +305,6 @@ SiteFusion.Login = {
 				for( var n = 0; n < this.Listeners.length; n++ ) {
 					this.Listeners[n].onFinish( false, SiteFusion.Login.ProgressListener.ERROR_LOGIN_INVALID, SFStringBundleObj.GetStringFromName("short_cantConnect") );
 				}
-			
 				SiteFusion.HandleError( eval( "(" + x.responseText + ")\n\n//# sourceURL=sitefusion-eval-login.js" ) );
 				
 				return false;
@@ -526,10 +526,7 @@ SiteFusion.Login = {
 	OpenRootWindow: function(flags) {
 		var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
 
-		var rootWindow = open( prefs.getCharPref("sitefusion.defaultRootWindowURI")+location.search, '', flags );
-		if (document.getElementById('mnuDebugSession').hasAttribute("checked")) {
-			rootWindow.addEventListener("load", function(){rootWindow.debugSession();},false);
-		}
+		open( prefs.getCharPref("sitefusion.defaultRootWindowURI")+location.search, '', flags );
 	},
 	
 	GetLibraries: function(login) {
