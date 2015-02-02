@@ -277,7 +277,7 @@ SiteFusion.Login = {
 				}
 			};
 			x.setRequestHeader( 'Content-Type', 'sitefusion/login' );
-			x.send( Object.toJSON( {
+			x.send( JSON.stringify( {
 				'username': username,
 				'password': password,
 				'appInfo': appInfo,
@@ -527,7 +527,7 @@ SiteFusion.Login = {
 		var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
 
 		var rootWindow = open( prefs.getCharPref("sitefusion.defaultRootWindowURI")+location.search, '', flags );
-		if ($('mnuDebugSession').hasAttribute("checked")) {
+		if (document.getElementById('mnuDebugSession').hasAttribute("checked")) {
 			rootWindow.addEventListener("load", function(){rootWindow.debugSession();},false);
 		}
 	},
