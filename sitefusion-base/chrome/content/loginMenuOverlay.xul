@@ -17,7 +17,7 @@
 	    <menuitem label="&mnusfopenaboutplugins;" oncommand="SiteFusionPopup.openAboutPlugins()"/>
 	    <menuitem label="&mnusfproxysettings;" oncommand="SiteFusionPopup.openProxySettings()"/>
 	    <menuitem label="&mnusfcertmanager;" oncommand="SiteFusionPopup.openCertificateManager()"/>
-	    <menuitem label="&mnudebugsession;" type="checkbox" id="mnuDebugSession"/>
+	    <menuitem label="&mnudebugsession;" disabled="true" type="checkbox" id="mnuDebugSession"/>
     </menupopup>
 </menu>
 </overlay>

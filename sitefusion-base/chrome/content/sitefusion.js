@@ -1,5 +1,5 @@
 
-var SiteFusion, Ci = Components.interfaces, Cc = Components.classes;
+var SiteFusion, Ci = Components.interfaces, Cc = Components.classes, Cu = Components.utils;
 var PromptService = Cc["@mozilla.org/embedcomp/prompt-service;1"].getService(Ci.nsIPromptService);
 var SFStringBundleService = Components.classes["@mozilla.org/intl/stringbundle;1"].getService(Components.interfaces.nsIStringBundleService);
 var SFStringBundleObj = SFStringBundleService.createBundle('chrome://sitefusion/locale/sitefusion.properties');
@@ -50,7 +50,10 @@ SiteFusionPopup = {
 	openAboutPlugins: function() {
 		window.openDialog("about:plugins", "sfAboutPluginsWindow", "chrome,centerscreen,width=500,height=800");
 	},
-	
+
+	openCertificateManager: function() {
+		window.openDialog('chrome://pippki/content/certManager.xul');
+	},
 	
 	openUpdates: function() {
 		var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Ci.nsIPrefBranch);
@@ -96,6 +99,7 @@ SiteFusion = {
 	ClientID: null,
 	Errors: {},
 	FatalErrorOccurred: false,
+	WakeOccurred: false,
 
 	RemoteLibraries: [],
 	LibraryContent: [],
@@ -239,7 +243,10 @@ SiteFusion = {
 		var message, title;
 		var check = false;
 		var debug = (location.search.substr(1).split('&').indexOf('-sfdebug=true') != -1);
+		if (this.WakeOccurred) return;
 		
+		//don't show any errors after a wake message
+
 		if( typeof(error.message) != undefined && error.message )
 			SiteFusion.ServerError( error.message+'' );
 		

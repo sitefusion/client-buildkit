@@ -526,7 +526,10 @@ SiteFusion.Login = {
 	OpenRootWindow: function(flags) {
 		var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
 
-		open( prefs.getCharPref("sitefusion.defaultRootWindowURI")+location.search, '', flags );
+		var rootWindow = open( prefs.getCharPref("sitefusion.defaultRootWindowURI")+location.search, '', flags );
+		if ($('mnuDebugSession').hasAttribute("checked")) {
+			rootWindow.addEventListener("load", function(){rootWindow.debugSession();},false);
+		}
 	},
 	
 	GetLibraries: function(login) {
