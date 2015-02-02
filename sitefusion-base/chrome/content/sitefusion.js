@@ -354,7 +354,7 @@ SiteFusion = {
 		if (this.IsErrorConsoleOpen()) {
 			return;
 		}
-		SiteFusionPopup.OpenErrorConsole();
+		SiteFusionPopup.openErrorConsole();
 	},
 	
 	Error: function( text ) {
