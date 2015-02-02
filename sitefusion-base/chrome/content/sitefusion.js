@@ -236,14 +236,14 @@ SiteFusion = {
 	},
 	
 	HandleError: function( error ) {
-		var message;
+		var message, title;
 		var check = false;
 		var debug = (location.search.substr(1).split('&').indexOf('-sfdebug=true') != -1);
 		
 		if( typeof(error.message) != undefined && error.message )
 			SiteFusion.ServerError( error.message+'' );
 		
-		//the care the errors that are likely to be cascaded, and should therefor be filtered conditionally
+		//these errors are likely to be cascaded, and should therefor be filtered conditionally
 		var suppressedErrors = ['empty_error','input_error','session_error','php_error','js_error'];
 
 		for (var i = 0; i < suppressedErrors.length; i++) {
@@ -258,7 +258,16 @@ SiteFusion = {
 		}
 
 		if( error.error) {
-			if (typeof SiteFusion.Errors[error.type] != "undefined") {
+			//check for custom  messages and titles
+			title = SFStringBundleObj.GetStringFromName('error');
+
+			if ((error.type == "app_not_available" || error.type == "invalid_login") &&  error.message) {
+				message = error.message;
+				if (error.title) {
+					title = error.title;
+				}
+			}
+			else if (typeof SiteFusion.Errors[error.type] != "undefined") {
 				message = SiteFusion.Errors[error.type].message;
 				check = SiteFusion.Errors[error.type].errorConsoleOption;
 			}
@@ -280,19 +289,19 @@ SiteFusion = {
 			if( message ) {
 				if (check) {
 					var checkState = { value: debug };
-					PromptService.alertCheck( targetWindow, SFStringBundleObj.GetStringFromName('error'), message, SFStringBundleObj.GetStringFromName('openErrorConsole'), checkState );
+					PromptService.alertCheck( targetWindow, title, message, SFStringBundleObj.GetStringFromName('openErrorConsole'), checkState );
 					if( checkState.value )
 						SiteFusion.OpenErrorConsole();
 				}
 				else {
 					var checkState = { value: debug };
-					PromptService.alert( targetWindow, SFStringBundleObj.GetStringFromName('error'), message);
+					PromptService.alert( targetWindow, title, message);
 				}
 			}
 			else {
 					//unspecified errors should always show checkbox
 					var checkState = { value: debug };
-					PromptService.alertCheck( targetWindow, SFStringBundleObj.GetStringFromName('error'), message, SFStringBundleObj.GetStringFromName('openErrorConsole'), checkState );
+					PromptService.alertCheck( targetWindow, title, message, SFStringBundleObj.GetStringFromName('openErrorConsole'), checkState );
 			}
 		}
 		else if( debug )
@@ -338,8 +347,7 @@ SiteFusion = {
 		if (this.IsErrorConsoleOpen()) {
 			return;
 		}
-		
-		window.openDialog( "chrome://global/content/console.xul", '', "chrome,menubar,extra-chrome,toolbar,dialog=no,resizable" );
+		SiteFusionPopup.OpenErrorConsole();
 	},
 	
 	Error: function( text ) {
@@ -407,6 +415,10 @@ SiteFusion = {
 		SiteFusion.Errors['empty_error'] = { 
 			message: SFStringBundleObj.GetStringFromName('empty_error'),
 			errorConsoleOption: true
+		};
+		SiteFusion.Errors['app_not_available'] = { 
+			message: SFStringBundleObj.GetStringFromName('app_not_available'),
+			errorConsoleOption: false
 		};
 	},
 	
