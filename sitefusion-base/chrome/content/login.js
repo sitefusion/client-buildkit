@@ -78,11 +78,11 @@ SiteFusion.Login = {
 					description: addon.description,
 					homepageURL: addon.homepageURL,
 					iconURL: addon.iconURL,
-					installDate: addon.installDate.toString(),
+					installDate: (addon.installDate ? addon.installDate.toString() : ''),
 					optionsURL: addon.optionsURL,
 					size: addon.size,
 					sourceURI: (addon.sourceURI) ? addon.sourceURI.spec : '',
-					updateDate: addon.updateDate.toString()
+					updateDate: (addon.updateDate ? addon.updateDate.toString() : '')
 				};
 			});
 			//this has to be done after loading the extensionlist, because it depends on it
@@ -264,8 +264,8 @@ SiteFusion.Login = {
 			x.onreadystatechange=function() {
 			  if(x.readyState==4) {
 				  	if( x.status != 200 ) {
-						for( var n = 0; n < this.Listeners.length; n++ ) {
-							this.Listeners[n].onFinish( false, SiteFusion.Login.ProgressListener.ERROR_SERVER_DOWN, SFStringBundleObj.GetStringFromName("short_cantConnect") );
+						for( var n = 0; n < oThis.Listeners.length; n++ ) {
+							oThis.Listeners[n].onFinish( false, SiteFusion.Login.ProgressListener.ERROR_SERVER_DOWN, SFStringBundleObj.GetStringFromName("short_cantConnect") );
 						}
 						
 						SiteFusion.HandleError( { 'error': true, 'type': 'server_offline', 'message': 'Server ' + address + ' returned response code ' + x.status + ' payload: ' + x.responseText} );
