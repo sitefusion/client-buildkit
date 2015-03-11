@@ -15,7 +15,6 @@
 	onload="SiteFusion.Login.SetListener(SiteFusion.Login.ProgressListener); SiteFusion.Login.Init(window.location);"
 	onclose="SiteFusion.Login.OnClose()">
 	
-	<script type="application/x-javascript" src="prototype.js"/>
 	<script type="application/x-javascript" src="sitefusion.js"/>
 	<script type="application/x-javascript" src="login.js"/>
 	<vbox align="stretch">

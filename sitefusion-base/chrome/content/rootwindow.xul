@@ -13,7 +13,6 @@
         <menuitem id="menu_FileQuitItem" label="&mnumacquit;" key="key_FileQuitItem"/>
     </menubar>
 	<toolbox id="navigator-toolbox"></toolbox>
-	<script type="application/x-javascript" src="prototype.js"/>
 	<script type="application/x-javascript" src="system.js"/>
 	<script type="application/x-javascript" src="sitefusion.js"/>
     <script type="application/x-javascript" src="rootwindow.js"/>
