@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://global/skin/global.css" type="text/css"?>
+
+<!DOCTYPE window SYSTEM "chrome://sitefusion/locale/sitefusion.dtd">
+<window
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    id="sitefusion-hiddenWindow"
+    windowtype="sitefusion-hiddenWindow"
+    onload="prepareDockMenu();">
+    <script type="application/x-javascript" src="system.js"/>
+    <script type="application/x-javascript"><![CDATA[
+    function prepareDockMenu() {
+    var Cc = Components.classes;
+    var Ci = Components.interfaces;
+    var dockMenuElement = document.getElementById("menu_mac_dockmenu");
+      if (dockMenuElement != null) {
+        var nativeMenu = Cc["@mozilla.org/widget/standalonenativemenu;1"]
+                         .createInstance(Ci.nsIStandaloneNativeMenu);
+  
+        try {
+          nativeMenu.init(dockMenuElement);
+  
+          var dockSupport = Cc["@mozilla.org/widget/macdocksupport;1"]
+                            .getService(Ci.nsIMacDockSupport);
+          dockSupport.dockMenu = nativeMenu;
+        }
+        catch (e) {
+        }
+      }
+    }
+    function OpenLoginWindowFromDockMenu() {
+    var Cc = Components.classes;
+    var Ci = Components.interfaces;
+    let win = System.openLoginWindow();
+    win.addEventListener("load", function listener() {
+      win.removeEventListener("load", listener);
+      let dockSupport = Cc["@mozilla.org/widget/macdocksupport;1"]
+        .getService(Ci.nsIMacDockSupport);
+      dockSupport.activateApplication(true);
+    });
+
+    return win;
+  }
+  function openAbout() {
+  	var win = window.open("chrome://branding/content/about.xhtml",'aboutDialog', 'chrome,centerscreen');
+  }
+  ]]></script>
+	<menubar>
+		<menu label="" hidden="true">
+			<menupopup>
+				<menuitem id="aboutName" label="&mnumacaboutsitefusion;" command="cmd:about"/>
+				<menuitem id="menu_mac_services" label="&mnumacservices;"/>
+				<menuitem id="menu_mac_hide_app" label="&mnumachidesitefusion;" key="key_mac_hide_app"/>
+				<menuitem id="menu_mac_hide_others" label="&mnumachideothers;" key="key_mac_hide_others"/>
+				<menuitem id="menu_mac_show_all" label="&mnumacshowall;"/>
+				<menuitem id="menu_preferences" label="&mnumacnewsession;" key="key_mac_new_app" command="cmd:new"/>
+				<menuitem id="menu_FileQuitItem" label="&mnumacquit;" key="key_FileQuitItem" command="cmd:quit"/>
+			</menupopup>
+		</menu>
+
+		<commandset id="main-commands">
+			<command id="cmd:about" oncommand="openAbout();"/>
+    		<command id="cmd:quit" oncommand="System.Shutdown();"/>
+    		<command id="cmd:new" oncommand="OpenLoginWindowFromDockMenu();"/>
+  		</commandset>
+		<keyset>
+			<key id="key_mac_hide_app" key="h" modifiers="meta"/>
+			<key id="key_mac_new_app" key="n" modifiers="meta" command="cmd:new"/>
+			<key id="key_mac_hide_others" key="h" modifiers="alt meta"/>
+			<key id="key_FileQuitItem" key="q" modifiers="meta" command="cmd:quit"/>
+		</keyset>
+	</menubar>
+
+<!-- Dock menu -->
+<popupset>	
+  <menupopup id="menu_mac_dockmenu">
+    <menuitem label="&mnumacnewsession;" id="macDockMenuNewWindow" command="cmd:new"/>
+  </menupopup>
+</popupset>
+
+</window>

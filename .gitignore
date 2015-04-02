@@ -4,3 +4,4 @@ xulrunners/macosx/XUL.framework
 xulrunners/windows/xulrunner
 .DS_Store
 ._.DS_Store
+builds/

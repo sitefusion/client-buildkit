@@ -1,5 +1,6 @@
 // Leave this line intact
 pref("toolkit.defaultChromeURI", "chrome://sitefusion/content/startup.xul");
+pref("browser.hiddenWindowChromeURL", "chrome://sitefusion/content/hiddenWindow.xul");
 
 pref("app.releaseNotesURL", "http://www.sitefusion.org/");
 
@@ -24,7 +25,9 @@ pref("javascript.options.jit.chrome", true);
 pref("javascript.options.jit.content", true);
 
 pref("network.protocol-handler.expose.http", false);
+pref("network.protocol-handler.expose.https", false);
 pref("network.protocol-handler.warn-external.http", false);
+pref("network.protocol-handler.warn-external.https", false);
 
 pref("network.protocol-handler.expose.mailto", false);
 pref("network.protocol-handler.warn-external.mailto", false);
@@ -80,4 +83,6 @@ pref("nglayout.debug.disable_xul_cache",false);
 pref("browser.dom.window.dump.enabled",true);
 pref("general.warnOnAboutConfig",false);
 pref("breakpad.reportURL","http://crash-stats.mozilla.com/report/index/");
-pref("app.support.baseURL","http://www.sitefusion.org/");
+pref("app.support.baseURL","https://www.sitefusion.org/");
+pref("devtools.debugger.remote-enabled", true);
+pref("devtools.chrome.enabled", true);
