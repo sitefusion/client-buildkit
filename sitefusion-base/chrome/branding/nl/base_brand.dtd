@@ -1,0 +1,12 @@
+<!ENTITY  brandShortName      "%APP%">
+<!ENTITY  brandFullName         "%APP%">
+<!ENTITY  brandMotto              "Empowering PHP based application development since 1337">
+<!ENTITY  vendorShortName     "%VENDOR%">
+
+<!ENTITY mnumacaboutsitefusion "Over %APP%">
+<!ENTITY mnumacservices "Voorzieningen">
+<!ENTITY mnumachidesitefusion "Verberg %APP%">
+<!ENTITY mnumachideothers "Verberg andere">
+<!ENTITY mnumacshowall "Toon alle vensters">
+<!ENTITY mnumacnewsession "Nieuwe sessie">
+<!ENTITY mnumacquit "Stop %APP%">

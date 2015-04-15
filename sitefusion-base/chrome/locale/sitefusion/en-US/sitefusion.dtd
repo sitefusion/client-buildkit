@@ -22,11 +22,3 @@
 <!ENTITY mnusfopenaboutplugins "Plugin Information">
 <!ENTITY mnusfcertmanager "Certificate Manager">
 <!ENTITY mnudebugsession "Debug Session">
-
-<!ENTITY mnumacaboutsitefusion "About SiteFusion">
-<!ENTITY mnumacservices "Services">
-<!ENTITY mnumachidesitefusion "Hide SiteFusion">
-<!ENTITY mnumachideothers "Hide Others">
-<!ENTITY mnumacshowall "Show All">
-<!ENTITY mnumacnewsession "New session">
-<!ENTITY mnumacquit "Quit SiteFusion">

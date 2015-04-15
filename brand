@@ -33,17 +33,30 @@ $paths = array(
 	'macosx/Contents/Resources/chrome/branding/en-US/base_brand.dtd',
 	'linux/32bit/chrome/branding/en-US/base_brand.dtd',
 	'linux/64bit/chrome/branding/en-US/base_brand.dtd',
+	'windows/chrome/branding/nl/base_brand.dtd',
+	'macosx/Contents/Resources/chrome/branding/nl/base_brand.dtd',
+	'linux/32bit/chrome/branding/nl/base_brand.dtd',
+	'linux/64bit/chrome/branding/nl/base_brand.dtd',
 	
 	'windows/chrome/branding/en-US/base_about.dtd',
 	'macosx/Contents/Resources/chrome/branding/en-US/base_about.dtd',
 	'linux/32bit/chrome/branding/en-US/base_about.dtd',
 	'linux/64bit/chrome/branding/en-US/base_about.dtd',
+	'windows/chrome/branding/nl/base_about.dtd',
+	'macosx/Contents/Resources/chrome/branding/nl/base_about.dtd',
+	'linux/32bit/chrome/branding/nl/base_about.dtd',
+	'linux/64bit/chrome/branding/nl/base_about.dtd',
+
 	
 	'windows/chrome/branding/en-US/base_brand.properties',
 	'macosx/Contents/Resources/chrome/branding/en-US/base_brand.properties',
 	'linux/32bit/chrome/branding/en-US/base_brand.properties',
 	'linux/64bit/chrome/branding/en-US/base_brand.properties',
-	
+	'windows/chrome/branding/nl/base_brand.properties',
+	'macosx/Contents/Resources/chrome/branding/nl/base_brand.properties',
+	'linux/32bit/chrome/branding/nl/base_brand.properties',
+	'linux/64bit/chrome/branding/nl/base_brand.properties',
+
 	'macosx/Contents/base_Info.plist'
 );
 
