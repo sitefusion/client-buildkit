@@ -1,5 +1,5 @@
 
-SiteFusion Client BuildKit (tailored for XULRunner 25.0.1)
+SiteFusion Client BuildKit (tailored for XULRunner 33)
 ----------------------------------------------------------------------------
 
 This package allows you to build and brand custom SiteFusion clients, and
