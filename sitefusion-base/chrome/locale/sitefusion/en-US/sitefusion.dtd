@@ -11,7 +11,7 @@
 
 <!ENTITY mnusitefusion "SiteFusion">
 <!ENTITY mnusfproxysettings "Proxy Settings">
-<!ENTITY mnusfinfo "SiteFusion Info">
+<!ENTITY mnusfinfo "Info">
 <!ENTITY mnusferrorconsole "Error Console">
 <!ENTITY mnusfcheckupdates "Check for updates">
 <!ENTITY mnusfopenextensions "Manage Add-ons">
