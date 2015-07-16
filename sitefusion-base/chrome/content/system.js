@@ -6,7 +6,7 @@ var System = {
 	installationsInProgress: [],
 	consoleService: null,
 	query: '',
-	
+
 	Restart: function() {
 		// Notify all windows that an application quit has been requested.
 		var os = Components.classes["@mozilla.org/observer-service;1"]
@@ -14,14 +14,14 @@ var System = {
 		var cancelQuit = Components.classes["@mozilla.org/supports-PRBool;1"]
 			.createInstance(Components.interfaces.nsISupportsPRBool);
 		os.notifyObservers(cancelQuit, "quit-application-requested", "restart");
-		
+
 		// Something aborted the quit process.
 		if (cancelQuit.data)
 			return;
-		
+		var flags = 0;
 		if( navigator.platform.match(/mac/i)) {
-			var SFStringBundleObj = SFStringBundleService.createBundle('chrome://sitefusion/locale/sitefusion.properties');
-
+			var SFStringBundleObj = Components.classes["@mozilla.org/intl/stringbundle;1"].getService(Components.interfaces.nsIStringBundleService).createBundle('chrome://sitefusion/locale/sitefusion.properties');
+			var PromptService = Components.classes["@mozilla.org/embedcomp/prompt-service;1"].getService(Components.interfaces.nsIPromptService);
 			PromptService.alert( null, SFStringBundleObj.GetStringFromName('restart'), SFStringBundleObj.GetStringFromName('appRequiredManualRestart'));
 
 			flags = Components.interfaces.nsIAppStartup.eAttemptQuit;
@@ -42,11 +42,11 @@ var System = {
 		var cancelQuit = Components.classes["@mozilla.org/supports-PRBool;1"]
 			.createInstance(Components.interfaces.nsISupportsPRBool);
 		os.notifyObservers(cancelQuit, "quit-application-requested", "restart");
-		
+
 		// Something aborted the quit process.
 		if (cancelQuit.data)
 			return;
-		
+
 		Components.classes["@mozilla.org/toolkit/app-startup;1"]
 			.getService(Components.interfaces.nsIAppStartup)
 			.quit(Components.interfaces.nsIAppStartup.eAttemptQuit);
@@ -58,7 +58,7 @@ var System = {
 		if( file.exists() == false ) {
 			return false;
 		}
-		
+
 		var oThis = this;
 		this.installationsInProgress.push(file.path);
 		AddonManager.getInstallForFile(file, function(aInstall) {
@@ -71,46 +71,46 @@ var System = {
             break;
         	}
       	}
-    
-  		}});	
+
+  		}});
   		aInstall.install();
 		}, "application/x-xpinstall");
-		
+
 		this.needRestart = true;
 		return true;
 	},
-	
+
 	GetExtensionInstallDirectories: function() {
-		
+
 		var extDirs = [];
-		
+
 		var profD = Components.classes["@mozilla.org/file/directory_service;1"]
 			.getService(Components.interfaces.nsIProperties)
 			.get("ProfD", Components.interfaces.nsIFile);
-		
+
 		var extDir = profD.parent;
 		extDir = extDir.parent;
 		extDir.append('sitefusion-install-extensions');
 		extDirs.push(extDir);
-		
+
 		var appD = Components.classes["@mozilla.org/file/directory_service;1"]
 			.getService(Components.interfaces.nsIProperties)
 			.get("CurProcD", Components.interfaces.nsIFile);
-			
+
 		var exDirApp = appD;
 		exDirApp.append('sitefusion-install-extensions');
-		
-		extDirs.push(exDirApp); 
-		
+
+		extDirs.push(exDirApp);
+
 		return extDirs;
 	},
-	
+
 	StartupInit: function() {
-		
+
 		if( window.arguments && window.arguments[0] ) {
 			var startDebugger = false;
 			var cmdline = window.arguments[0].QueryInterface(Components.interfaces.nsICommandLine);
-			
+
 			for( var n = 0; n < cmdline.length; n++ ) {
 				var arg = cmdline.getArgument(n);
 				if (arg == "chrome://browser/content/devtools/framework/toolbox-process-window.xul") {
@@ -130,10 +130,10 @@ var System = {
 				return;
 			}
 		}
-		
+
 		this.needRestart = false;
 		this.restartAfterInstall = false;
-		
+
 		var parts = this.query.split('&');
 		for (var i=0; i < parts.length; i++) {
 			var subparts = parts[i].split("=");
@@ -147,21 +147,21 @@ var System = {
 
 		this.checkForNewExtensions();
 	},
-	
-	checkForNewExtensions: function () {	
+
+	checkForNewExtensions: function () {
 		var extDirs = System.GetExtensionInstallDirectories();
-		
+
 		for (var n =0; n < extDirs.length; n++) {
 			var extDir = extDirs[n];
 			if( extDir.exists() ) {
 				var entries = extDir.directoryEntries;
-				var array = [];  
-				while(entries.hasMoreElements()) {  
-					var entry = entries.getNext();  
-					entry.QueryInterface(Components.interfaces.nsIFile);  
+				var array = [];
+				while(entries.hasMoreElements()) {
+					var entry = entries.getNext();
+					entry.QueryInterface(Components.interfaces.nsIFile);
 					array.push(entry);
 				}
-				
+
 				for( var i = 0; i < array.length; i++ ) {
 					if( array[i].path.substr(-4) == '.xpi' ) {
 						System.InstallExtension(array[i].path, true);
@@ -171,7 +171,7 @@ var System = {
 			}
 		}
 		var oThis = this;
-		
+
 		if (this.installationsInProgress.length) {
 			var oThis = this;
 			setTimeout(function() {oThis.waitForInstalling(oThis);},100);
@@ -180,9 +180,9 @@ var System = {
 				oThis.openLoginWindow();
 		}
 	},
-	
+
 	waitForInstalling: function(oThis) {
-						
+
 			if (oThis.installationsInProgress.length) {
 				setTimeout(function() {oThis.waitForInstalling(oThis );},100);
 			}
@@ -198,10 +198,10 @@ var System = {
 				oThis.openLoginWindow();
 			}
 	},
-	
+
 	openLoginWindow: function() {
 		var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
-		
+
 		if( prefs.getPrefType("sitefusion.defaultLoginWindowURI") != prefs.PREF_STRING ) {
 			prefs.setCharPref( "sitefusion.defaultLoginWindowURI", "chrome://sitefusion/content/login.xul" );
 		}
