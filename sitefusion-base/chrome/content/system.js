@@ -19,9 +19,20 @@ var System = {
 		if (cancelQuit.data)
 			return;
 		
+		if( navigator.platform.match(/mac/i)) {
+			var SFStringBundleObj = SFStringBundleService.createBundle('chrome://sitefusion/locale/sitefusion.properties');
+
+			PromptService.alert( null, SFStringBundleObj.GetStringFromName('restart'), SFStringBundleObj.GetStringFromName('appRequiredManualRestart'));
+
+			flags = Components.interfaces.nsIAppStartup.eAttemptQuit;
+		}
+		else {
+			flags = Components.interfaces.nsIAppStartup.eRestart | Components.interfaces.nsIAppStartup.eAttemptQuit;
+		}
+
 		Components.classes["@mozilla.org/toolkit/app-startup;1"]
 			.getService(Components.interfaces.nsIAppStartup)
-			.quit(Components.interfaces.nsIAppStartup.eRestart | Components.interfaces.nsIAppStartup.eAttemptQuit);
+			.quit(flags);
 	},
 
 	Shutdown: function() {

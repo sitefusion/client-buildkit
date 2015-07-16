@@ -1,6 +1,7 @@
 // Leave this line intact
 pref("toolkit.defaultChromeURI", "chrome://sitefusion/content/startup.xul");
 pref("browser.hiddenWindowChromeURL", "chrome://sitefusion/content/hiddenWindow.xul");
+pref("toolkit.defaultChromeFeatures", "chrome,resizeble=no,diaglog=no,centerscreen");
 
 pref("app.releaseNotesURL", "http://www.sitefusion.org/");
 

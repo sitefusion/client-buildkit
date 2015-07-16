@@ -1,4 +1,5 @@
 Components.utils.import("resource://gre/modules/AddonManager.jsm");
+var PromptService = Components.classes["@mozilla.org/embedcomp/prompt-service;1"].getService(Components.interfaces.nsIPromptService);
 
 SiteFusion.Login = {
 
@@ -379,10 +380,8 @@ SiteFusion.Login = {
 						}
 					break;
 					case 'get':
-						if( SiteFusion.Login.extensionInfo[id] == undefined) {
-							SiteFusion.Login.DownloadExtensions.push( login.extensionPolicy[n][2] );
-							login.extensionPolicy.shift();
-						}
+						SiteFusion.Login.DownloadExtensions.push( login.extensionPolicy[n][2] );
+						login.extensionPolicy.shift();
 					break;
 				}
 			}
@@ -508,6 +507,7 @@ SiteFusion.Login = {
 	},
 	
 	RestartApp: function() {
+		var flags = 0;
 		var os = Components.classes["@mozilla.org/observer-service;1"]
 			.getService(Components.interfaces.nsIObserverService);
 		var cancelQuit = Components.classes["@mozilla.org/supports-PRBool;1"]
@@ -518,9 +518,29 @@ SiteFusion.Login = {
 		if (cancelQuit.data)
 			return;
 
+		if( navigator.platform.match(/mac/i)) {
+			var targetWindow = window;
+	        winUtils = targetWindow.QueryInterface(Components.interfaces.nsIInterfaceRequestor).getInterface(Components.interfaces.nsIDOMWindowUtils);
+
+	        try {
+		        if (winUtils && !winUtils.isParentWindowMainWidgetVisible) {
+		            targetWindow = null;
+		        }
+	    	}
+	    	catch (e) {
+	    		targetWindow = null;
+	    	}
+			PromptService.alert( targetWindow, SFStringBundleObj.GetStringFromName('restart'), SFStringBundleObj.GetStringFromName('appRequiredManualRestart'));
+
+			flags = Components.interfaces.nsIAppStartup.eAttemptQuit;
+		}
+		else {
+			flags = Components.interfaces.nsIAppStartup.eRestart | Components.interfaces.nsIAppStartup.eAttemptQuit;
+		}
+
 		Components.classes["@mozilla.org/toolkit/app-startup;1"]
 			.getService(Components.interfaces.nsIAppStartup)
-			.quit(Components.interfaces.nsIAppStartup.eRestart | Components.interfaces.nsIAppStartup.eAttemptQuit);
+			.quit(flags);
 	},
 	
 	OpenRootWindow: function(flags) {
