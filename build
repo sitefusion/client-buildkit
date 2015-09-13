@@ -126,14 +126,14 @@ fi
 if [ $BUILD_MACOSX == 1 ]; then
 	if [ ! -z "$(ls ./xulrunners/macosx/XUL.framework)" ]; then
 		echo "  - MacOSX XULRunner found"
-		cp -R ./xulrunners/macosx ./builds/macosx/Contents/Frameworks
+		cp -R ./xulrunners/macosx/XUL.framework/. ./builds/macosx/Contents/MacOS
 	else
 		echo "  ! MacOSX XULRunner NOT found"
 	fi
-	
-	if [ ! -z "$(ls ./xulrunners/macosx/XUL.framework/Versions/Current/updater.app)" ]; then
+
+	if [ ! -z "$(ls ./xulrunners/macosx/XUL.framework/updater.app)" ]; then
 		echo "  - MacOSX XULRunner updater.app found"
-		cp -R ./xulrunners/macosx/XUL.framework/Versions/Current/updater.app ./builds/macosx/Contents/Frameworks/XUL.framework/Versions/Current/
+		cp -R ./xulrunners/macosx/XUL.framework/updater.app ./builds/macosx/Contents/MacOS/
 	else
 		echo "  ! MacOSX XULRunner updater NOT found"
 	fi
@@ -161,27 +161,27 @@ if [ ! -z "$(ls ./xulrunner-chrome/)" ]; then
 	(($BUILD_WINDOWS)) && mkdir -p ./builds/windows/xulrunner/chrome/
 	(($BUILD_WINDOWS)) && cd ./xulrunner-chrome/ && find ./ ! -name '*.patch' | cpio -pd ../builds/windows/xulrunner/chrome/
 	(($BUILD_WINDOWS)) && cd ..
-	
-	(($BUILD_MACOSX)) && mkdir -p ./builds/macosx/Contents/Frameworks/XUL.framework/Versions/Current/chrome/
-	(($BUILD_MACOSX)) && cd ./xulrunner-chrome/ && find ./ ! -name '*.patch' | cpio -pd ../builds/macosx/Contents/Frameworks/XUL.framework/Versions/Current/chrome/
+
+	(($BUILD_MACOSX)) && mkdir -p ./builds/macosx/Contents/MacOS/chrome/
+	(($BUILD_MACOSX)) && cd ./xulrunner-chrome/ && find ./ ! -name '*.patch' | cpio -pd ../builds/macosx/Contents/MacOS/chrome/
 	(($BUILD_MACOSX)) && cd ..
-	
-	
+
+
 	(($BUILD_LINUX)) && mkdir -p ./builds/linux/32bit/xulrunner/chrome/
 	(($BUILD_LINUX)) && cd ./xulrunner-chrome/ && find ./ ! -name '*.patch' | cpio -pd ../builds/linux/32bit/xulrunner/chrome/
 	(($BUILD_LINUX)) && cd ..
-	
-	
+
+
 	(($BUILD_LINUX)) && mkdir -p ./builds/linux/64bit/xulrunner/chrome/
 	(($BUILD_LINUX)) && cd ./xulrunner-chrome/ && find ./ ! -name '*.patch' | cpio -pd ../builds/linux/64bit/xulrunner/chrome/
 	(($BUILD_LINUX)) && cd ..
-	
+
 	if [ ! -z "$(ls ./xulrunner-chrome/chrome.manifest.patch)" ]; then
 		echo "  - Chrome diff patch found"
 		(($BUILD_WINDOWS)) && echo "applying chrome.manifest.patch to windows build..."
 		(($BUILD_WINDOWS)) && patch ./builds/windows/xulrunner/chrome.manifest < ./xulrunner-chrome/chrome.manifest.patch
 		(($BUILD_MACOSX)) && echo "applying chrome.manifest.patch to Mac OSX build..."
-		(($BUILD_MACOSX)) && patch ./builds/macosx/Contents/Frameworks/XUL.framework/Versions/Current/chrome.manifest < ./xulrunner-chrome/chrome.manifest.patch
+		(($BUILD_MACOSX)) && patch ./builds/macosx/Contents/MacOS/chrome.manifest < ./xulrunner-chrome/chrome.manifest.patch
 		(($BUILD_LINUX)) && echo "applying chrome.manifest.patch to Linux builds..."
 		(($BUILD_LINUX)) && patch ./builds/linux/32bit/xulrunner/chrome.manifest < ./xulrunner-chrome/chrome.manifest.patch
 		(($BUILD_LINUX)) && patch ./builds/linux/64bit/xulrunner/chrome.manifest < ./xulrunner-chrome/chrome.manifest.patch
@@ -197,9 +197,9 @@ if [ ! -z "$(ls ./xulrunner-res/*.patch)" ]; then
 	(($BUILD_WINDOWS)) && mkdir ./builds/windows/xulrunner/omni/
 	(($BUILD_WINDOWS)) && unzip ./builds/windows/xulrunner/omni.ja -d ./builds/windows/xulrunner/omni/
 
-	#(($BUILD_MACOSX)) && echo "  - Unzipping macosx omni.ja contents to ./builds/macosx/Contents/Frameworks/XUL.framework/Versions/Current/omni/"
-	#(($BUILD_MACOSX)) && mkdir ./builds/macosx/Contents/Frameworks/XUL.framework/Versions/Current/omni/
-	#(($BUILD_MACOSX)) && unzip ./builds/macosx/Contents/Frameworks/XUL.framework/Versions/Current/omni.ja -d ./builds/macosx/Contents/Frameworks/XUL.framework/Versions/Current/omni/
+	#(($BUILD_MACOSX)) && echo "  - Unzipping macosx omni.ja contents to ./builds/macosx/Contents/MacOS/omni/"
+	#(($BUILD_MACOSX)) && mkdir ./builds/macosx/Contents/MacOS/omni/
+	#(($BUILD_MACOSX)) && unzip ./builds/macosx/Contents/MacOS/omni.ja -d ./builds/macosx/Contents/MacOS/omni/
 
 	(($BUILD_LINUX)) && echo "  - Unzipping Linux-32 res to ./builds/windows/xulrunner/omni/"
 	(($BUILD_LINUX)) && mkdir ./builds/linux/32bit/xulrunner/omni/
@@ -215,17 +215,17 @@ if [ ! -z "$(ls ./xulrunner-res/*.patch)" ]; then
 		filename=${patchfile%.patch}
 		filename=`basename $filename`
 		echo "  - Applying ${filename}.patch"
-		(($BUILD_WINDOWS)) && echo "Processing patch file:" 
+		(($BUILD_WINDOWS)) && echo "Processing patch file:"
 
 		(($BUILD_WINDOWS)) && echo "  - Patching ./builds/windows/xulrunner/omni/res/${filename}"
 		(($BUILD_WINDOWS)) && patch ./builds/windows/xulrunner/omni/res/$filename < $patchfile
 
-		(($BUILD_MACOSX)) && echo "  - Patching ./builds/macosx/Contents/Frameworks/XUL.framework/Versions/Current/omni/res/${filename}"
-		(($BUILD_MACOSX)) && patch ./builds/macosx/Contents/Frameworks/XUL.framework/Versions/Current/omni/res/${filename} < $patchfile
+		(($BUILD_MACOSX)) && echo "  - Patching ./builds/macosx/Contents/MacOS/omni/res/${filename}"
+		(($BUILD_MACOSX)) && patch ./builds/macosx/Contents/MacOS/omni/res/${filename} < $patchfile
 
 		(($BUILD_LINUX)) && echo "  - Patching ./builds/linux/32bit/xulrunner/res/${filename}"
 		(($BUILD_LINUX)) && patch ./builds/linux/32bit/xulrunner/omni/res/${filename} < $patchfile
-		
+
 		(($BUILD_LINUX)) && echo "  - Patching ./builds/linux/64bit/xulrunner/res/${filename}"
 		(($BUILD_LINUX)) && patch ./builds/linux/64bit/xulrunner/omni/res/${filename} < $patchfile
 
@@ -235,10 +235,10 @@ if [ ! -z "$(ls ./xulrunner-res/*.patch)" ]; then
 		(($BUILD_WINDOWS)) && rm -r omni
 		(($BUILD_WINDOWS)) && cd ../../..
 
-		(($BUILD_MACOSX)) && cd ./builds/macosx/Contents/Frameworks/XUL.framework/Versions/Current/
+		(($BUILD_MACOSX)) && cd ./builds/macosx/Contents/MacOS/
 		(($BUILD_MACOSX)) && zip -r omni.ja ./omni
 		(($BUILD_MACOSX)) && rm -r omni
-		(($BUILD_MACOSX)) && cd ../../../../../../..
+		(($BUILD_MACOSX)) && cd ../../../..
 
 		(($BUILD_LINUX)) && cd ./builds/linux/32bit/xulrunner/
 		(($BUILD_LINUX)) && zip -r omni.ja ./omni

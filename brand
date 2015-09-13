@@ -9,17 +9,22 @@ if( ! isset($argv[2]) )
 
 $vendor = $argv[1];
 $product = $argv[2];
-
+$iniFile = parse_ini_file('sitefusion-base/base_application.ini',TRUE);
+$version = $iniFile["App"]["Version"];
+echo "Version: $version\n";
 echo "Will brand builds with:\nVendor:  $vendor\nProduct: $product\n";
 
 function brandFile( $path ) {
-	global $vendor, $product, $vendorURL;
-	
+	global $vendor, $product, $vendorURL, $version;
+
 	$newpath = dirname($path).'/'.substr(basename($path),5);
 	rename( $path, $newpath );
 	$cont = file_get_contents($newpath);
 	$cont = str_replace("%VENDOR%",$vendor,$cont);
 	$cont = str_replace("%APP%",$product,$cont);
+	$cont = str_replace("%VENDORNS%",str_replace(" ","",$vendor),$cont);
+	$cont = str_replace("%APPNS%",str_replace(" ","",$product),$cont);
+	$cont = str_replace("%VERSION%",$version,$cont);
 	file_put_contents( $newpath, $cont );
 }
 
@@ -28,7 +33,7 @@ $paths = array(
 	'macosx/Contents/Resources/base_application.ini',
 	'linux/32bit/base_application.ini',
 	'linux/64bit/base_application.ini',
-	
+
 	'windows/chrome/branding/en-US/base_brand.dtd',
 	'macosx/Contents/Resources/chrome/branding/en-US/base_brand.dtd',
 	'linux/32bit/chrome/branding/en-US/base_brand.dtd',
@@ -37,7 +42,7 @@ $paths = array(
 	'macosx/Contents/Resources/chrome/branding/nl/base_brand.dtd',
 	'linux/32bit/chrome/branding/nl/base_brand.dtd',
 	'linux/64bit/chrome/branding/nl/base_brand.dtd',
-	
+
 	'windows/chrome/branding/en-US/base_about.dtd',
 	'macosx/Contents/Resources/chrome/branding/en-US/base_about.dtd',
 	'linux/32bit/chrome/branding/en-US/base_about.dtd',
@@ -47,7 +52,7 @@ $paths = array(
 	'linux/32bit/chrome/branding/nl/base_about.dtd',
 	'linux/64bit/chrome/branding/nl/base_about.dtd',
 
-	
+
 	'windows/chrome/branding/en-US/base_brand.properties',
 	'macosx/Contents/Resources/chrome/branding/en-US/base_brand.properties',
 	'linux/32bit/chrome/branding/en-US/base_brand.properties',
@@ -66,7 +71,7 @@ foreach ( $paths as $path ) {
 	$fullpath = 'builds/'.$path;
 	if(! file_exists($fullpath) )
 		continue;
-	
+
 	echo "- Branding $path\n";
 	brandFile( $fullpath );
 }
