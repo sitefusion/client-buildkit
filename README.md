@@ -1,5 +1,5 @@
 
-SiteFusion Client BuildKit (tailored for XULRunner 25.0.1)
+SiteFusion Client BuildKit (tailored for XULRunner 40)
 ----------------------------------------------------------------------------
 
 This package allows you to build and brand custom SiteFusion clients, and
@@ -61,17 +61,17 @@ contained in this package:
        of the xulrunner. Additional language packs (.jar and .manifest)
        can be added here, the Dutch language pack is included by default.
        Note that language packs need to originate from a FireFox build
-       of the exact same version as the included XULRunner build. 
+       of the exact same version as the included XULRunner build.
 
  + xulrunner-res : this directory contains altered .css files that need
        to sit in the xulrunner/res directory. To ensure compatibility
        with future changes in the xulrunner/res files from Mozilla
-       releases, only .patch files are processed and applied to the 
+       releases, only .patch files are processed and applied to the
        corresponding release files in the xulrunner/res directory.
 
  + xulrunners : this directory contains the unpacked Mozilla XULRunner
        releases without any modifications. These can be replaced with
-       a version of choice. Note that the base directory names are 
-       platform specific and should be left the same. Linux needs to 
+       a version of choice. Note that the base directory names are
+       platform specific and should be left the same. Linux needs to
        supplied with both a 32bit and a 64bit clients.
 

@@ -18,17 +18,7 @@ var System = {
 		// Something aborted the quit process.
 		if (cancelQuit.data)
 			return;
-		var flags = 0;
-		if( navigator.platform.match(/mac/i)) {
-			var SFStringBundleObj = Components.classes["@mozilla.org/intl/stringbundle;1"].getService(Components.interfaces.nsIStringBundleService).createBundle('chrome://sitefusion/locale/sitefusion.properties');
-			var PromptService = Components.classes["@mozilla.org/embedcomp/prompt-service;1"].getService(Components.interfaces.nsIPromptService);
-			PromptService.alert( null, SFStringBundleObj.GetStringFromName('restart'), SFStringBundleObj.GetStringFromName('appRequiredManualRestart'));
-
-			flags = Components.interfaces.nsIAppStartup.eAttemptQuit;
-		}
-		else {
-			flags = Components.interfaces.nsIAppStartup.eRestart | Components.interfaces.nsIAppStartup.eAttemptQuit;
-		}
+		var flags = Components.interfaces.nsIAppStartup.eRestart | Components.interfaces.nsIAppStartup.eAttemptQuit;
 
 		Components.classes["@mozilla.org/toolkit/app-startup;1"]
 			.getService(Components.interfaces.nsIAppStartup)

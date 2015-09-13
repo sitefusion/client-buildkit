@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleExecutable</key>
-	<string>xulrunner_stub</string>
+	<string>sitefusion</string>
 	<key>CFBundleGetInfoString</key>
 	<string>%VERSION%</string>
 	<key>CFBundleIconFile</key>

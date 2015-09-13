@@ -124,16 +124,16 @@ if [ $BUILD_WINDOWS == 1 ]; then
 fi
 
 if [ $BUILD_MACOSX == 1 ]; then
-	if [ ! -z "$(ls ./xulrunners/macosx/XUL.framework)" ]; then
+	if [ ! -z "$(ls ./xulrunners/macosx/XUL.framework/Versions/Current)" ]; then
 		echo "  - MacOSX XULRunner found"
-		cp -R ./xulrunners/macosx/XUL.framework/. ./builds/macosx/Contents/MacOS
+		cp -R ./xulrunners/macosx/XUL.framework/Versions/Current/. ./builds/macosx/Contents/MacOS
 	else
 		echo "  ! MacOSX XULRunner NOT found"
 	fi
 
-	if [ ! -z "$(ls ./xulrunners/macosx/XUL.framework/updater.app)" ]; then
+	if [ ! -z "$(ls ./xulrunners/macosx/XUL.framework/Versions/Current/updater.app)" ]; then
 		echo "  - MacOSX XULRunner updater.app found"
-		cp -R ./xulrunners/macosx/XUL.framework/updater.app ./builds/macosx/Contents/MacOS/
+		cp -R ./xulrunners/macosx/XUL.framework/Versions/Current/updater.app ./builds/macosx/Contents/MacOS/
 	else
 		echo "  ! MacOSX XULRunner updater NOT found"
 	fi
