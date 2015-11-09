@@ -1,7 +1,9 @@
 content  sitefusion  chrome/content/
 skin     sitefusion  standard/1.0  chrome/skin/standard/
-locale sitefusion nl chrome/locale/sitefusion/nl/
 locale sitefusion en-US chrome/locale/sitefusion/en-US/
+locale sitefusion fr chrome/locale/sitefusion/fr/
+locale sitefusion nl chrome/locale/sitefusion/nl/
 locale 	 branding en-US chrome/branding/en-US/
+locale   branding fr chrome/branding/fr/
 locale 	 branding nl chrome/branding/nl/
 overlay chrome://mozapps/content/extensions/extensions.xul chrome://sitefusion/content/addonmanagerOverlay.xul

@@ -1,0 +1,24 @@
+<!ENTITY sflogin "SiteFusion Connexion">
+<!ENTITY readytosignin "Ready to sign in">
+<!ENTITY application "Application">
+<!ENTITY username "Nom d'utilisateur">
+<!ENTITY password "Mot de passe">
+<!ENTITY arguments "Arguments">
+<!ENTITY serverurl "Server URL">
+<!ENTITY close "Fermer">
+<!ENTITY login "Connexion">
+<!ENTITY tools "Outils">
+
+<!ENTITY mnusitefusion "SiteFusion">
+<!ENTITY mnusfproxysettings "Proxy Settings">
+<!ENTITY mnusfinfo "Info">
+<!ENTITY mnusferrorconsole "Error Console">
+<!ENTITY mnusfcheckupdates "Check for updates">
+<!ENTITY mnusfopenextensions "Manage Add-ons">
+<!ENTITY mnusfopenaboutconfig "Manage Preferences">
+<!ENTITY mnusfopenaboutsupport "System Information">
+<!ENTITY mnusfopenaboutcrashes "Crashes">
+<!ENTITY mnusfopenaboutmemory "Memory Usage">
+<!ENTITY mnusfopenaboutplugins "Plugin Information">
+<!ENTITY mnusfcertmanager "Certificate Manager">
+<!ENTITY mnudebugsession "Debug Session">
